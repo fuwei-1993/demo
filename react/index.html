@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    .error {
+      width: 100px;
+      height: 30px;
+      line-height: 30px;
+      padding: 0;
+      color: #fff;
+      background-color: #ff4d4f;
+      border-color: #ff4d4f;
+      text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.12);
+      box-shadow: 0 2px 0 rgba(0, 0, 0, 0.045);
+    }
+  </style>
+</head>
+
+<body>
+  <div id="root"></div>
+  <script type="module">
+    import React from './react.js'
+    import { diff } from './dom-diff/index.js'
+
+    class Cild extends React.Component {
+      componentWillMount() {
+        console.log('Child will mount')
+      }
+      componentDidMount() {
+        console.log('Child mount')
+      }
+      render() {
+        const { children } = this.props
+        return React.createElement('div', { onClick: () => this.setState() }, 'child', ...children)
+      }
+    }
+
+    class Counter extends React.Component {
+      state = {
+        counter: 1
+      }
+      componentWillMount() {
+        console.log('Counter will mount')
+      }
+      componentDidMount() {
+        console.log('Counter mount')
+      }
+      render() {
+        const { children } = this.props
+        return React.createElement(Cild, this.props, ...children)
+      }
+    }
+
+    const element = React.createElement(
+      Counter,
+      { name: 123 },
+      React.createElement('button', {
+        class: 'error',
+        onClick() {
+          alert('hellow React')
+        }
+      },
+        React.createElement('span', null, 'hellow world'))
+    )
+    const patches = diff(element, element)
+
+    React.render(element, document.querySelector('#root'))
+
+
+
+    const routes = [{
+      path: '/crow',
+      name: 'Crow',
+      route: [{
+        path: 'detail',
+        name: 'Crow Detail'
+      }, {
+        path: '/edit',
+        name: 'Crow Edit'
+      }]
+    }, {
+      path: '/audience',
+      name: 'Audience'
+    }, {
+      path: '/task',
+      name: 'Task'
+    }, {
+      path: '/campagin',
+      name: 'Campagin'
+    }]
+
+    const targetRoutes = [{
+      path: '/smartgrowth/crow',
+      name: 'Crow',
+      children: [
+        {
+        path: '/smartgrowth/detail',
+        name: 'Crow Detail'
+      }, 
+      {
+        path: '/smartgrowth//edit',
+        name: 'Crow Edit'
+      }]
+    }, {
+      path: '/smartgrowth/audience',
+      name: 'Audience',
+      children: [{
+        path: '/smartgrowth/task',
+        name: 'Task'
+      },
+      {
+        path: '/smartgrowth/campagin',
+        name: 'Campagin'
+      }]
+    }]
+
+
+    function routesTranslateFor(routes) {
+    
+      return routes.filter((item) => {
+        if(hasName(item.name) && item.route) {
+          item.route = routesTranslateFor(item.route)
+        }
+        return hasName(item.name)
+      })
+    }
+
+    function hasName(name) {
+      return getIGrowthRouteNames(targetRoutes).some((item)=> item === name)
+    }
+
+    console.log(getIGrowthRouteNames(targetRoutes))
+
+  
+
+    function getIGrowthRouteNames(targetRoutes) {
+      return targetRoutes.map(({ name, children }) => {
+        if (!children) return name
+        return [name, ...getIGrowthRouteNames(children)]
+      }).flat()
+    }
+    console.time('start')
+    routesTranslateFor(routes)
+    console.timeEnd('start')
+
+  </script>
+</body>
+
+</html>
