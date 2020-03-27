@@ -66,8 +66,8 @@ function executor(queue = [], {
           executor(currentTask.queue, {
             taskQueue,
             jobsQueue,
-      
-          }, ([heighLevelQueue]) => runTaskList([heighLevelQueue]))
+
+          }, ({ heighLevelQueue }) => runTaskList({ heighLevelQueue }))
         }
         heighLevelQueue.push(currentTask)
         break
@@ -75,14 +75,19 @@ function executor(queue = [], {
 
         currentTask.afterCallBack = () => {
           executor(currentTask.queue, {
-            taskQueue
-          }, ([heighLevelQueue, jobsQueue]) => runTaskList([heighLevelQueue, jobsQueue]))
+            jobsQueue,
+            taskQueue,
+          }, ({ heighLevelQueue }) => runTaskList({ heighLevelQueue, jobsQueue }))
         }
         jobsQueue.push(currentTask)
         break
       case PRIORITY.LOW:
         currentTask.afterCallBack = () => {
-          executor(currentTask.queue, {}, runTaskList)
+          executor(currentTask.queue, {
+            jobsQueue,
+            taskQueue
+          },
+            ({ heighLevelQueue }) => runTaskList({ heighLevelQueue, taskQueue }))
         }
         taskQueue.push(currentTask)
         break
@@ -91,12 +96,16 @@ function executor(queue = [], {
 
     }
   }
-  runTaskList([heighLevelQueue, jobsQueue, taskQueue])
+  runTaskList({ heighLevelQueue, jobsQueue, taskQueue })
 }
 
 function runTaskList(tasksList) {
-  tasksList.forEach(tasks => {
-    tasks.forEach(task => task.callback())
+  Object.values(tasksList).forEach(tasks => {
+   
+    while(tasks.length) {
+      const task = tasks.shift()
+      task.callback()
+    }
   })
 }
 
@@ -112,8 +121,10 @@ function simulatExecution() {
   executor([
     macroTask.add(() => {
       console.log('宏任务')
-    },[macroTask.add(()=> {
+    }, [macroTask.add(() => {
       console.log('宏任务儿子宏任务')
+    }),task.add(()=> {
+      console.log('宏任务儿子普通任务')
     })]),
     task.add(() => {
       console.log('爸爸任务')
@@ -121,7 +132,7 @@ function simulatExecution() {
       console.log('儿子宏任务')
     }), task.add(() => {
       console.log('儿子任务')
-    },[macroTask.add(() => {
+    }, [macroTask.add(() => {
       console.log('儿子任务的宏任务')
     })])]),
 

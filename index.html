@@ -9,21 +9,37 @@
 </head>
 
 <body>
-
+	我是你爸爸
 	<script>
-		// const a = {
-		// 	0: 1, 1: 1, [Symbol.iterator]: function* () {
-		// 		for (let key in this) {
-		// 			yield this[key]
-		// 		}
-		// 	}
-		// }
-		// console.log([...a])
-		// for (const i of a) {
-		// 	console.log(i)
-		// }
-	
-
+		const a = {
+			0: 1, 1: 1, [Symbol.iterator]: function* () {
+				for (let key in this) {
+					yield this[key]
+				}
+			}
+		}
+		console.log([...a])
+		for (const i of a) {
+			console.log(i)
+		}
+		
+	function repetitionTimesFor(str) {
+		let temp = null
+		const result = {}
+		
+		for (let i = 0; i < str.length; i++) {
+			if(!temp) {
+				temp = str[i]
+			} else if(temp === str[i]) {
+				result[temp] ? result[temp] ++ : result[temp] = 2
+			} else {
+				temp = str[i]
+			}
+			
+		}
+		return result
+	}
+	console.log(repetitionTimesFor('aaxaabbccccsssd'))
 		
 	</script>
 </body>
