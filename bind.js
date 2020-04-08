@@ -27,6 +27,7 @@ Function.prototype.myBind = function (target, arg) {
   }
 
   result.prototype = Object.create(this.prototype)
+  result.constructor = this
   return result
 }
 
