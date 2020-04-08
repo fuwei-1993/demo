@@ -7,7 +7,7 @@ export default class Sense {
     this.canvas = platform.canvas
     this.currentSence = null
     this.speed = 1.5
-    this.gameOver = this.title = new Struct({
+    this.gameOver = new Struct({
       el: platform.imgEls['gameOver'],
       canvas: this.canvas,
       onClick: this.runGame
