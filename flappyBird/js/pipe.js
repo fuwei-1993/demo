@@ -27,14 +27,4 @@ export default class Pipe extends AbstractStruct {
   update() {
     this.x -= this.speed
   }
-
-  render() {
-    this.ctx.drawImage(
-      this.el[this.imgPosition],
-      this.x,
-      this.y,
-      this.width,
-      this.height
-    )
-  }
 }
