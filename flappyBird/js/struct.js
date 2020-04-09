@@ -37,7 +37,7 @@ export default class AbstractStruct {
   bindEvent(onClick) {
     this.canvas.addEventListener('click', (e) => {
       if (
-        this.x / this.canvas.width <= e.clientX
+        this.x <= e.clientX
         && e.clientX <= this.x + this.width
         && this.y <= e.clientY
         && this.y + this.height >= e.clientY
