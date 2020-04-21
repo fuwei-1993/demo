@@ -36,13 +36,7 @@ class MyPromise {
     if (this.promiseStatus === PROMISE_STATUS.PENDING) {
       this.promiseStatus = PROMISE_STATUS.FULFILLED
       this.promiseValue = value
-      const firstCallback = this.onFulfilledCallBacks[0]
-      firstCallback && this.onFulfilledCallBacks.slice(1).reduce(
-        (result, cb) => {
-          return () => cb(result())
-        },
-        () => firstCallback(value)
-      )()
+      this.executeCallbacks(this.onFulfilledCallBacks, value)
     }
   }
 
@@ -50,14 +44,19 @@ class MyPromise {
     if (this.promiseStatus === PROMISE_STATUS.PENDING) {
       this.promiseStatus = PROMISE_STATUS.REJECTED
       this.promiseReason = reason
-      const firstCallback = this.onRejectedCallBacks[0]
-      firstCallback && this.onRejectedCallBacks.slice(1).reduce(
+      this.executeCallbacks(this.onRejectedCallBacks, reason)
+    }
+  }
+
+  executeCallbacks(callbacks, value) {
+    const [firstCallback] = callbacks
+    firstCallback &&
+      callbacks.slice(1).reduce(
         (result, cb) => {
           return () => cb(result())
         },
-        () => firstCallback(reason)
+        () => firstCallback(value)
       )()
-    }
   }
 
   then(onFulfilled, onRejected) {
@@ -80,9 +79,9 @@ class MyPromise {
 }
 
 new MyPromise((resolve) => {
-  setTimeout(() => {
-    resolve(1)
-  }, 1000)
+  // setTimeout(() => {
+  resolve(1)
+  // }, 1000)
 })
   .then((res) => {
     console.log(res)
