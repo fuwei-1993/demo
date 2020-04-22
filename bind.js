@@ -18,7 +18,7 @@ Animal.apply = function (target, arg) {
   return this(...arg)
 }
 
-Function.prototype.myBind = function (target, arg) {
+Animal.myBind = function (target, arg) {
   const that = this
 
   function result(...args) {
