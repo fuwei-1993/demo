@@ -12,6 +12,7 @@ class MyPromise {
     this.onFulfilledCallbacks = []
     this.onRejectedCallbacks = []
     this.promise2 = null
+
     const resolve = (value) => {
       if ((this.status = STATUS.PENDING)) {
         this.status = STATUS.FULFILLED
@@ -33,6 +34,40 @@ class MyPromise {
     } catch (error) {
       reject(error)
     }
+  }
+
+  static resolve(value) {
+    return new MyPromise((resolve) => {
+      resolve(value)
+    })
+  }
+
+  static reject(reason) {
+    return new MyPromise((_, reject) => {
+      reject(reason)
+    })
+  }
+
+  static race(promises) {
+    return new MyPromise((resolve, reject) => {
+      promises.forEach((p) => {
+        p.then(resolve, reject)
+      })
+    })
+  }
+
+  static all(promises) {
+    const result = []
+    return new MyPromise((resolve, reject) => {
+      promises.forEach((p) => {
+        p.then((res) => {
+          result.push(res)
+          if (result.length === promises.length) {
+            resolve(result)
+          }
+        }, reject)
+      })
+    })
   }
 
   then(onFulfilled, onRejected) {
@@ -115,6 +150,10 @@ class MyPromise {
         }
       })
     }
+  }
+
+  catch(cb) {
+    this.then(null, cb)
   }
 }
 
