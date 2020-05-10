@@ -8,14 +8,20 @@ enum Status {
 	SLEEP
 }
 
+const methodsDecorator = (): ParameterDecorator => (...arg) => {
+	console.log(arg)
+}
+
 class LazyMan {
 	private sleepTimes: number = 0
 	private sleepUnits: sleepUnit[] = []
 	private status: Status = Status.AWAKE
 
-	constructor(private readonly name: string) {
+	constructor(@methodsDecorator() private readonly name: string) {
 		this.init()
-
+		setTimeout(() => {
+			this.execSleeps()
+		})
 	}
 
 	private init() {
@@ -31,20 +37,33 @@ class LazyMan {
 	}
 
 	public sleep(time: number) {
+		if (this.status === Status.SLEEP) {
+			this.sleepTimes++
+		}
 		this.status = Status.SLEEP
-		this.createSleepUnits(() => {
-			setTimeout(() => {
-				console.log('sleep....')
-				this.execNextStack()
-			}, time)
-		})
-		this.sleepTimes++
+		this.createSleepUnits((index: number) => (
+			new Promise<void>((r) => {
+				window.setTimeout(() => {
+					console.log('sleep....')
+					this.execNextStack(index)
+					r()
+				}, time)
+			})
+		))
+		
 		return this
 	}
 
-	private execSleeps() {
-		
+	private  async execSleeps() {
+		if(this.sleepTimes === this.sleepUnits.length - 1) {
+			let index = 0
+			for (const sleepUnit of this.sleepUnits) {
+				await sleepUnit.currentFn(index)
+				index++
+			}
+		}
 	}
+
 
 	public eat(sth: string) {
 		const handleEat = () => {
@@ -53,6 +72,7 @@ class LazyMan {
 		switch (this.status) {
 			case Status.AWAKE:
 				handleEat()
+				break
 			case Status.SLEEP:
 				this.addNextStack(handleEat)
 				break
@@ -64,8 +84,8 @@ class LazyMan {
 		this.sleepUnits[this.sleepTimes].nextStack.push(fn)
 	}
 
-	private execNextStack() {
-		this.sleepUnits[this.sleepTimes].nextStack.forEach(fn => fn())
+	private execNextStack(sleepTimes: number) {
+		this.sleepUnits[sleepTimes].nextStack.forEach(fn => fn())
 	}
 }
 
