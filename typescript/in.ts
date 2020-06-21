@@ -5,5 +5,9 @@ type TName = {
 }
 
 type INameCollection<T> = {
-  names: T extends  keyof TName ? T : never
+  names: T extends keyof TName ? T : never
+}
+
+const collection: INameCollection<name> = {
+  names: 'Smith',
 }
