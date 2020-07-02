@@ -16,4 +16,16 @@ const getUserVale: GetUserValue = (user, key) => {
   return user[key]
 }
 
+interface Part {
+  id: string
+  name: string
+  underPart(newName: string): void
+}
+
+type PickFnName<T> = {
+  [K in keyof T]: T[K] extends Function ? K : never
+}[keyof T]
+
+type PickResult = PickFnName<Part>
+
 console.log(getUserVale(user,'name'))
