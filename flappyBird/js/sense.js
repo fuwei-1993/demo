@@ -72,7 +72,6 @@ export default class Sense {
     this.platform.createRoles()
     this.platform.bindBirdUp()
     this.button.unbindEvent()
-    console.log(234)
   }
 
   initEndSense() {
