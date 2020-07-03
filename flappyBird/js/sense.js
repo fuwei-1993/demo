@@ -5,7 +5,7 @@ export default class Sense {
   constructor(platform) {
     this.platform = platform
     this.canvas = platform.canvas
-    this.currentSence = null
+    this.currentSense = null
     this.speed = 1.5
     this.gameOver = new Struct({
       el: platform.imgEls['gameOver'],
@@ -27,10 +27,10 @@ export default class Sense {
     })
   }
 
-  entry(sence) {
-    if(sence === this.currentSence) return
-    this.currentSence = sence
-    switch (this.currentSence) {
+  entry(sense) {
+    if(sense === this.currentSense) return
+    this.currentSense = sense
+    switch (this.currentSense) {
       case SCENE_STATUS.START_GAME:
         this.initStartSense()
         break
@@ -44,7 +44,7 @@ export default class Sense {
 
 
   run() {
-    switch (this.currentSence) {
+    switch (this.currentSense) {
       case SCENE_STATUS.START_GAME:
         this.renderStartSense()
         break
@@ -71,6 +71,8 @@ export default class Sense {
   initRunSense() {
     this.platform.createRoles()
     this.platform.bindBirdUp()
+    this.button.unbindEvent()
+    console.log(234)
   }
 
   initEndSense() {

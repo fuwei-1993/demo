@@ -12,7 +12,8 @@ export default class AbstractStruct {
     this.canvas = canvas
     this.ctx = canvas.getContext('2d')
     this.pause = false
-    onClick && this.bindEvent(onClick)
+    this.onClick = onClick
+    onClick && this.bindEvent()
   }
 
   update() {
@@ -22,7 +23,11 @@ export default class AbstractStruct {
   render() {
     this.ctx.drawImage(
       this.el[this.imgPosition],
-      this.x, this.y, this.width, this.height)
+      this.x,
+      this.y,
+      this.width,
+      this.height
+    )
   }
 
   run() {
@@ -34,21 +39,26 @@ export default class AbstractStruct {
     this.speed = 0
   }
 
-  bindEvent(onClick) {
-    this.canvas.addEventListener('click', (e) => {
-      if (
-        this.x <= e.clientX
-        && e.clientX <= this.x + this.width
-        && this.y <= e.clientY
-        && this.y + this.height >= e.clientY
-      ) {
-        onClick()
-      }
-    })
+  handleEvent = (e, cb) => {
+    if (
+      this.x <= e.clientX &&
+      e.clientX <= this.x + this.width &&
+      this.y <= e.clientY &&
+      this.y + this.height >= e.clientY
+    ) {
+      this.onClick()
+    }
+  }
+
+  bindEvent() {
+    this.canvas.addEventListener('click', this.handleEvent)
+  }
+
+  unbindEvent() {
+    this.canvas.removeEventListener('click', this.handleEvent)
   }
 
   alignCenter() {
     this.x = this.canvas.width / 2 - this.width / 2
   }
-
 }
