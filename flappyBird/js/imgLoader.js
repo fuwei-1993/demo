@@ -2,7 +2,7 @@ import { SCREEN_PERCENT } from './constant.js'
 
 export default class ImageLoader {
   loading = Symbol('loading')
-  sourceTarget = '../source/image/flappybird/'
+  sourceTarget = '../flappyBird/source/image/flappybird/'
   imageEls = {}
 
   isLoadComplete() {
