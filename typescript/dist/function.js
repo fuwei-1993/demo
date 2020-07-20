@@ -21,12 +21,12 @@ function stringOrNumber(foo) {
     if (typeof foo === 'number')
         return foo * foo;
     if (typeof foo === 'string')
-        return "hello " + foo;
-    var err = new Error('使用错误');
+        return `hello ${foo}`;
+    const err = new Error('使用错误');
     return err;
 }
-var overLoaded = stringOrNumber;
+const overLoaded = stringOrNumber;
 overLoaded('234');
 overLoaded(123);
-var simple = function (foo) { return foo.toString(); };
+const simple = foo => foo.toString();
 console.log(simple(123));

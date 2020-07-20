@@ -1,41 +1,38 @@
 "use strict";
 function mapObject(target, cb) {
-    var result = {};
-    for (var key in target) {
+    const result = {};
+    for (const key in target) {
         result[key] = cb(target[key]);
     }
     return result;
 }
-var test = {
+const test = {
     name: 'test',
     func: 'click',
 };
-mapObject(test, function (val) { return val.length; });
+mapObject(test, (val) => val.length);
 function proxy(target) {
-    var result = {};
-    var _loop_1 = function (key) {
+    const result = {};
+    for (const key in target) {
         result[key] = {
-            get: function () {
+            get() {
                 return target[key];
             },
-            set: function (value) {
+            set(value) {
                 target[key] = value;
             },
         };
-    };
-    for (var key in target) {
-        _loop_1(key);
     }
     return result;
 }
 function unProxyFy(target) {
-    var result = {};
-    for (var key in target) {
+    const result = {};
+    for (const key in target) {
         result[key] = target[key].get();
     }
     return result;
 }
-var testProxy = {
+const testProxy = {
     name: 'proxy',
     weight: '150kg',
 };

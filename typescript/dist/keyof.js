@@ -1,9 +1,9 @@
 "use strict";
-var user = {
+const user = {
     name: 'Smith',
     gender: 'male',
 };
-var getUserVale = function (user, key) {
+const getUserVale = (user, key) => {
     return user[key];
 };
 console.log(getUserVale(user, 'name'));

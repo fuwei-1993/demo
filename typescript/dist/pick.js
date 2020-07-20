@@ -1,14 +1,14 @@
 "use strict";
-var testObj = {
+const testObj = {
     name: 'test',
     age: 18,
     gender: 'female',
 };
 function pick(obj, keys) {
-    var result = {};
-    keys.forEach(function (key) {
+    const result = {};
+    keys.forEach((key) => {
         result[key] = obj[key];
     });
     return result;
 }
-var pickObj = pick(testObj, ['age', 'gender']);
+const pickObj = pick(testObj, ['age', 'gender']);
