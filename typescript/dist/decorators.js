@@ -1,7 +1,7 @@
 "use strict";
 /*
-**  ts内置装饰器类型
-*/
+ **  ts内置装饰器类型
+ */
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -45,17 +45,32 @@ const RequiredMap = new WeakMap();
 const requiredMetadataKey = Symbol('required');
 function Require(target, propertyKey, parameterIndex) {
     const rewriteTarget = target;
-    // console.log(target,rewriteTarget[propertyKey])
-    // const exitingRequiredParamter: number[] = RequiredMap.set() || []
+    const exitingRequiredParamter = RequiredMap.get(rewriteTarget[propertyKey]) || [];
+    exitingRequiredParamter.push(parameterIndex);
+    RequiredMap.set(rewriteTarget[propertyKey], exitingRequiredParamter);
+}
+function Validate(target, propertyName, descriptor) {
+    const method = descriptor.value;
+    descriptor.value = function (...arg) {
+        let requiredParamter = RequiredMap.get(method);
+        if (requiredParamter) {
+            for (const parameterIndex of requiredParamter) {
+                if (parameterIndex >= arg.length || !arguments[parameterIndex]) {
+                    throw new Error('paramter is required');
+                }
+            }
+        }
+        return method.apply(this, arg);
+    };
 }
 class Greeter {
     constructor(message) {
         this.greeting = message;
     }
-    greet(name) {
-    }
+    greet(name, height) { }
 }
 __decorate([
-    __param(0, Require)
+    Validate,
+    __param(0, Require), __param(1, Require)
 ], Greeter.prototype, "greet", null);
-//自带的装饰类型就感觉很局限
+new Greeter('1123').greet('1', 2);
