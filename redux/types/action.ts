@@ -19,7 +19,6 @@ export interface ActionCreator<A, P extends any[] = any[]> {
   (...args: P): A
 }
 
-
 /**
  * @description: Object whose values are action creator functions.
  */
