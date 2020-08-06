@@ -131,6 +131,8 @@ export interface Store<
 
 /** @template Ext Store extension that is mixed into the Store type.
  * @template StateExt State extension that is mixed into the state type.
+ * 
+ * 其实applyMiddleware就是这个所谓store的扩展增强器的实现
  */
 export type StoreEnhancerStoreCreator<Ext = {}, StateExt = never> = <
   S = any,
