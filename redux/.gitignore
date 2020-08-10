@@ -1,0 +1,21 @@
+# Dependency directories
+node_modules/
+jspm_packages/
+
+# Mac 
+.DS_Store
+
+# parcel-bundler cache (https://parceljs.org/)
+.cache
+
+# Nest build output
+dist/
+
+# vscode 
+.vscode
+
+# error
+yarn-error.log
+
+# rewrite email
+temple.sh

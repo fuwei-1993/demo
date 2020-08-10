@@ -1,4 +1,4 @@
-import { Action, AnyAction } from './action'
+import { Action, AnyAction } from './actions'
 import '../utils/symbol-observable'
 import { Reducer } from './reducers'
 /**

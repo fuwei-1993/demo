@@ -1,4 +1,4 @@
-import { Action, AnyAction } from './types/action'
+import { Action, AnyAction } from './types/actions'
 import {
   ReducersMapObject,
   Reducer,
@@ -139,11 +139,11 @@ export function combineReducers(reducers: ReducersMapObject) {
   for (let i = 0; i < reducerKeys.length; i++) {
     const key = reducerKeys[i]
 
-    // if(process.env.NODE_ENV !== 'production') {
-    //   if(typeof reducers[key] === 'undefined') {
-    //     warning(`No reducer provided for key "${key}"`)
-    //   }
-    // }
+    if(process.env.NODE_ENV !== 'production') {
+      if(typeof reducers[key] === 'undefined') {
+        warning(`No reducer provided for key "${key}"`)
+      }
+    }
 
     if (typeof reducers[key] === 'function') {
       finalReducers[key] = reducers[key]
@@ -155,15 +155,15 @@ export function combineReducers(reducers: ReducersMapObject) {
   // This is used to make sure we don't warn about same
   // key multiple times
   let unexpectedKeyCache: { [key: string]: true }
-  // if(process.env.NODE_ENV !== 'production') {
-  //   unexpectedKeyCache = {}
-  // }
+  if(process.env.NODE_ENV !== 'production') {
+    unexpectedKeyCache = {}
+  }
 
   let shapeAssertionError: Error
 
   try {
     assertReducerShape(finalReducers)
-  } catch(e) {
+  } catch (e) {
     shapeAssertionError = e
   }
 
@@ -171,26 +171,26 @@ export function combineReducers(reducers: ReducersMapObject) {
     state: StateFromReducersMapObject<typeof reducers> = {},
     action: AnyAction
   ) {
-    if(shapeAssertionError) {
+    if (shapeAssertionError) {
       throw shapeAssertionError
     }
 
-    // if(process.env.NODE_ENV !== 'production') {
-    //   const warningMessage = getUnexpectedStateShapeWarningMessage(
-    //     state,
-    //     finalReducers,
-    //     action,
-    //     unexpectedKeyCache
-    //   )
+    if(process.env.NODE_ENV !== 'production') {
+      const warningMessage = getUnexpectedStateShapeWarningMessage(
+        state,
+        finalReducers,
+        action,
+        unexpectedKeyCache
+      )
 
-    //   if(warningMessage) {
-    //     warning(warningMessage)
-    //   }
-    // }
+      if(warningMessage) {
+        warning(warningMessage)
+      }
+    }
 
     let hasChanged = false
     const nextState: StateFromReducersMapObject<typeof reducers> = {}
-    for (let i = 0; i< finalReducerKeys.length; i++) {
+    for (let i = 0; i < finalReducerKeys.length; i++) {
       const key = finalReducerKeys[i]
       const reducer = finalReducers[key]
       const previousStateForKey = state[key]

@@ -1,4 +1,4 @@
-import { Action } from './types/action'
+import { Action } from './types/actions'
 import { Reducer } from './types/reducers'
 import {
   StoreEnhancer,

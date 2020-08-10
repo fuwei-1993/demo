@@ -2,7 +2,7 @@ import {
   AnyAction,
   ActionCreator,
   ActionCreatorsMapObject,
-} from './types/action'
+} from './types/actions'
 import { Dispatch } from './types/store'
 
 function bindActionCreator<A extends AnyAction = AnyAction>(
