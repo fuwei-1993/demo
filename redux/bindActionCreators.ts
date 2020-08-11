@@ -28,27 +28,27 @@ function bindActionCreator<A extends AnyAction = AnyAction>(
  * function.
  */
 
-export function bindActionCreators<A, C extends ActionCreator<A>>(
+function bindActionCreators<A, C extends ActionCreator<A>>(
   actionCreator: C,
   dispatch: Dispatch
 ): C
 
-export function bindActionCreators<
+function bindActionCreators<
   A extends ActionCreator<any>,
   B extends ActionCreator<any>
 >(actionCreator: A, dispatch: Dispatch): B
 
-export function bindActionCreators<A, M extends ActionCreatorsMapObject<A>>(
+function bindActionCreators<A, M extends ActionCreatorsMapObject<A>>(
   actionCreators: M,
   dispatch: Dispatch
 ): M
 
-export function bindActionCreators<
+function bindActionCreators<
   M extends ActionCreatorsMapObject,
   N extends ActionCreatorsMapObject
 >(actionCreators: M, dispatch: Dispatch): N
 
-export function bindActionCreators(
+function bindActionCreators(
   actionCreators: ActionCreator<any> | ActionCreatorsMapObject,
   dispatch: Dispatch
 ) {
@@ -75,3 +75,5 @@ export function bindActionCreators(
 
   return boundActionCreators
 }
+
+export default bindActionCreators

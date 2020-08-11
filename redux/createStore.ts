@@ -9,7 +9,7 @@ import {
   Dispatch,
 } from './types/store'
 import { isPlainObject } from './utils/isPlainObject'
-import { ActionTypes } from './utils/actionTypes'
+import ActionTypes from './utils/actionTypes'
 import $$observable from './utils/symbol-observable'
 
 /**
@@ -25,16 +25,16 @@ import $$observable from './utils/symbol-observable'
  * @returns A Redux store that lets you read the state, dispatch actions
  * and subscribe to changes
  */
-export function createStore<S, A extends Action, Ext = {}, StateExt = never>(
+function createStore<S, A extends Action, Ext = {}, StateExt = never>(
   reducer: Reducer<S, A>,
   enhancer?: StoreEnhancer<Ext, StateExt>
 ): Store<ExtendState<S, StateExt>, A, StateExt, Ext> & Ext
-export function createStore<S, A extends Action, Ext = {}, StateExt = never>(
+function createStore<S, A extends Action, Ext = {}, StateExt = never>(
   reducer: Reducer<S, A>,
   preloadedState?: PreloadedState<S>,
   enhancer?: StoreEnhancer<Ext, StateExt>
 ): Store<ExtendState<S, StateExt>, A, StateExt, Ext> & Ext
-export function createStore<S, A extends Action, Ext = {}, StateExt = never>(
+function createStore<S, A extends Action, Ext = {}, StateExt = never>(
   reducer: Reducer<S, A>,
   preloadedState?: PreloadedState<S> | StoreEnhancer<Ext, StateExt>,
   enhancer?: StoreEnhancer<Ext, StateExt>
@@ -262,3 +262,5 @@ export function createStore<S, A extends Action, Ext = {}, StateExt = never>(
   } as unknown) as Store<ExtendState<S, StateExt>, A, StateExt, Ext> & Ext
   return store
 }
+
+export default createStore

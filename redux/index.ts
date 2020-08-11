@@ -1,11 +1,11 @@
 // functions
-import { createStore } from './createStore'
-import { combineReducers } from './combineReducers'
-import { bindActionCreators } from './bindActionCreators'
-import { applyMiddleware } from './applyMiddleware'
-import { compose } from './compose'
-import { warning } from './utils/warning'
-import { ActionTypes as __DO_NOT_USE__ActionTypes } from './utils/actionTypes'
+import createStore from './createStore'
+import combineReducers from './combineReducers'
+import bindActionCreators from './bindActionCreators'
+import applyMiddleware from './applyMiddleware'
+import compose from './compose'
+import warning from './utils/warning'
+import __DO_NOT_USE__ActionTypes from './utils/actionTypes'
 
 // types
 // store

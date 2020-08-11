@@ -5,10 +5,10 @@ import {
   StateFromReducersMapObject,
   ActionFromReducersMapObject,
 } from './types/reducers'
-import { ActionTypes } from './utils/actionTypes'
+import ActionTypes from './utils/actionTypes'
 import { isPlainObject } from './utils/isPlainObject'
 import { CombinedState } from './types/store'
-import { warning } from './utils/warning'
+import warning from './utils/warning'
 
 function getUndefinedStateErrorMessage(key: string, action: Action) {
   const actionType = action?.type
@@ -118,29 +118,29 @@ function assertReducerShape(reducers: ReducersMapObject) {
  * @returns A reducer function that invokes every reducer inside the passed object,
  *   and builds a state object with the same shape
  */
-export function combineReducers<S>(
+function combineReducers<S>(
   reducers: ReducersMapObject<S, any>
 ): Reducer<CombinedState<S>>
 
-export function combineReducers<S, A extends Action = AnyAction>(
+function combineReducers<S, A extends Action = AnyAction>(
   reducers: ReducersMapObject<S, A>
 ): Reducer<CombinedState<S>, A>
 
-export function combineReducers<M extends ReducersMapObject>(
+function combineReducers<M extends ReducersMapObject>(
   reducers: M
 ): Reducer<
   CombinedState<StateFromReducersMapObject<M>>,
   ActionFromReducersMapObject<M>
 >
 
-export function combineReducers(reducers: ReducersMapObject) {
+function combineReducers(reducers: ReducersMapObject) {
   const reducerKeys = Object.keys(reducers)
   const finalReducers: ReducersMapObject = {}
   for (let i = 0; i < reducerKeys.length; i++) {
     const key = reducerKeys[i]
 
-    if(process.env.NODE_ENV !== 'production') {
-      if(typeof reducers[key] === 'undefined') {
+    if (process.env.NODE_ENV !== 'production') {
+      if (typeof reducers[key] === 'undefined') {
         warning(`No reducer provided for key "${key}"`)
       }
     }
@@ -155,7 +155,7 @@ export function combineReducers(reducers: ReducersMapObject) {
   // This is used to make sure we don't warn about same
   // key multiple times
   let unexpectedKeyCache: { [key: string]: true }
-  if(process.env.NODE_ENV !== 'production') {
+  if (process.env.NODE_ENV !== 'production') {
     unexpectedKeyCache = {}
   }
 
@@ -175,7 +175,7 @@ export function combineReducers(reducers: ReducersMapObject) {
       throw shapeAssertionError
     }
 
-    if(process.env.NODE_ENV !== 'production') {
+    if (process.env.NODE_ENV !== 'production') {
       const warningMessage = getUnexpectedStateShapeWarningMessage(
         state,
         finalReducers,
@@ -183,7 +183,7 @@ export function combineReducers(reducers: ReducersMapObject) {
         unexpectedKeyCache
       )
 
-      if(warningMessage) {
+      if (warningMessage) {
         warning(warningMessage)
       }
     }
@@ -207,3 +207,5 @@ export function combineReducers(reducers: ReducersMapObject) {
     return hasChanged ? nextState : state
   }
 }
+
+export default combineReducers
