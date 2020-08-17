@@ -39,10 +39,14 @@ function createStore<S, A extends Action, Ext = {}, StateExt = never>(
   preloadedState?: PreloadedState<S> | StoreEnhancer<Ext, StateExt>,
   enhancer?: StoreEnhancer<Ext, StateExt>
 ): Store<ExtendState<S, StateExt>, A, StateExt, Ext> & Ext {
+  // 三个参数 reducer preloadedState 和 enhancer: applyMiddleware 返回的函数
+
   if (
     (typeof preloadedState === 'function' && typeof enhancer === 'function') ||
     (typeof enhancer === 'function' && typeof arguments[3] === 'function')
   ) {
+
+    // 如果preloadedState 和 enhancer 同时为函数或者 enhancer 和第四个参数均为函数则猜测多了一个 enhancer
     throw new Error(
       'It looks like you are passing several store enhancers to ' +
         'createStore(). This is not supported. Instead, compose them ' +
@@ -201,6 +205,7 @@ function createStore<S, A extends Action, Ext = {}, StateExt = never>(
     // store 类型转化为 new store 的类型
     // TODO: store 还不知道是从哪来的
     const store = ''
+    
     return (store as unknown) as Store<
       ExtendState<newState, StateExt>,
       NewActions,
