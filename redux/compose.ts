@@ -55,6 +55,8 @@ function compose(...funcs: Function[]) {
     return funcs[0]
   }
 
+  // 将函数数组从右到左执行一次， 并且将执行的结果作为下一个函数的参数
+  // 将执行科里化的参数传递到最先执行的函数
   return funcs.reduce((result, curr) => (...arg: any[]) => result(curr(...arg)))
 }
 

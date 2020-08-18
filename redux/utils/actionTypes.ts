@@ -5,9 +5,11 @@
  * Do not reference these action types directly in your code.
  */
 
+// 生成36位随机数 作为key的唯一标示
 const randomString = () =>
   Math.random().toString(36).substring(7).split('').join('.')
 
+// 默认的一些内置 action type 避免重复
 const ActionTypes = {
   INIT: `@@redux/INIT${/* #__PURE__ */ randomString()}`,
   REPLACE: `@@redux/REPLACE${/* #__PURE__ */ randomString()}`,
