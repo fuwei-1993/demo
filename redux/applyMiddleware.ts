@@ -83,6 +83,7 @@ function applyMiddleware(...middlewares: Middleware[]): StoreEnhancer<any> {
     // compose: (dispatch) => middlewareCurryStore1(middlewareCurryStore2(dispatch)) 将 dispatch 科里化
     // 赋值操作是说将 compose 出来的函数来对现有的 dispatch 进行增强
     // 所以在 next => {...} 里去调用 dispatch 就会递归栈溢出， 所以这个 dispatch 暴露出来是干嘛的 ？
+    // 这里补充一点 在执行 middlewareAPI.dispatch() 时 会在当前作用域找最新的dispatch 也就是下面这个，也就解决了上面1、2、两个问题
     dispatch = compose<typeof dispatch>(...chain)(store.dispatch) 
 
     

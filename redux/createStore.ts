@@ -25,6 +25,8 @@ import $$observable from './utils/symbol-observable'
  * @returns A Redux store that lets you read the state, dispatch actions
  * and subscribe to changes
  */
+
+// 三个参数 reducer preloadedState 和 enhancer: applyMiddleware 返回的函数
 function createStore<S, A extends Action, Ext = {}, StateExt = never>(
   reducer: Reducer<S, A>,
   enhancer?: StoreEnhancer<Ext, StateExt>
@@ -39,7 +41,7 @@ function createStore<S, A extends Action, Ext = {}, StateExt = never>(
   preloadedState?: PreloadedState<S> | StoreEnhancer<Ext, StateExt>,
   enhancer?: StoreEnhancer<Ext, StateExt>
 ): Store<ExtendState<S, StateExt>, A, StateExt, Ext> & Ext {
-  // 三个参数 reducer preloadedState 和 enhancer: applyMiddleware 返回的函数
+  
 
   if (
     (typeof preloadedState === 'function' && typeof enhancer === 'function') ||
@@ -56,6 +58,7 @@ function createStore<S, A extends Action, Ext = {}, StateExt = never>(
 
   // 这个部分第一眼看上去有点谜 其实就是重载 createStore(reducer, preloadedState) | createStore(reducer, enhancer)
   // 所以讲道理不如 直接重载 createStore(reducer, preloadedState)，写了一大堆可选
+  // 作用是兼容没有 preloadedState 而是 enhancer 的情况
   if (typeof preloadedState === 'function' && typeof enhancer === 'undefined') {
     enhancer = preloadedState as StoreEnhancer<Ext, StateExt>
     preloadedState = undefined
@@ -66,6 +69,8 @@ function createStore<S, A extends Action, Ext = {}, StateExt = never>(
       throw new Error('Expected the enhancer to be a function')
     }
 
+    // enhancer 是啥呢？可以把它看成 applyMiddleware 执行后的返回结果
+    // 这里递归调用里 createStore 直到不满足此条件（enhancer是function）就停止递归
     return enhancer(createStore)(
       reducer,
       preloadedState as PreloadedState<S>
@@ -76,12 +81,21 @@ function createStore<S, A extends Action, Ext = {}, StateExt = never>(
     throw new Error('Expected the reducer to be a function')
   }
 
+  // 将传入的 reducer 存起来
   let currentReducer = reducer
+  // 将传入的 preloadState 也就是初始化的 state 存起来
   let currentState = preloadedState as S
+
+  // 当前监听的事件组
   let currentListeners: (() => void)[] | null = []
+
+  // 下一轮监听的事件组
   let nextListeners = currentListeners
+
+  // 判断是否在调用 dispatch 的 flag
   let isDispatching: boolean = false
 
+  // 这是说 当下一轮事件组等于当前事件组的时候 进行浅拷贝
   function ensureCanMutateNextListener() {
     if (nextListeners === currentListeners) {
       nextListeners = currentListeners.slice()
@@ -93,6 +107,8 @@ function createStore<S, A extends Action, Ext = {}, StateExt = never>(
    *
    * @return The current state tree of you application
    */
+
+   // 如果不是在 dispatch 操作时获取当前的 state 对象
   function getState(): S {
     if (isDispatching) {
       throw new Error(
@@ -125,7 +141,7 @@ function createStore<S, A extends Action, Ext = {}, StateExt = never>(
     nextListeners.push(listener)
 
     return function unsubscribe() {
-      if (isSubscribed) {
+      if (!isSubscribed) {
         return
       }
 
@@ -163,12 +179,14 @@ function createStore<S, A extends Action, Ext = {}, StateExt = never>(
     }
 
     try {
+      // 更新 flag 表示正在执行 dispatch
+      // 并且利用当前的 reducer 更新 state
       isDispatching = true
       currentState = currentReducer(currentState, action)
     } finally {
       isDispatching = false
     }
-
+    // 等于在每一次的 dispatch 都将next给current然后批量执行 
     const listeners = (currentListeners = nextListeners)
     for (let i = 0; i < listeners.length; i++) {
       const listener = listeners[i]
@@ -205,7 +223,7 @@ function createStore<S, A extends Action, Ext = {}, StateExt = never>(
     // store 类型转化为 new store 的类型
     // TODO: store 还不知道是从哪来的
     const store = ''
-    
+
     return (store as unknown) as Store<
       ExtendState<newState, StateExt>,
       NewActions,
