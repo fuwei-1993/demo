@@ -186,7 +186,7 @@ function createStore<S, A extends Action, Ext = {}, StateExt = never>(
     } finally {
       isDispatching = false
     }
-    // 等于在每一次的 dispatch 都将next给current然后批量执行 
+    // 等于在每一次的 dispatch 都将 next 给 current 然后批量执行 
     const listeners = (currentListeners = nextListeners)
     for (let i = 0; i < listeners.length; i++) {
       const listener = listeners[i]
@@ -208,7 +208,7 @@ function createStore<S, A extends Action, Ext = {}, StateExt = never>(
     if (typeof nextReducer !== 'function') {
       throw new Error('Expected the nextReducer to be a function')
     }
-    // TODO: do this more elegantly 十分的有趣，官方可能觉得这样写部太优雅，所以有了这个todo
+    // TODO: do this more elegantly 十分的有趣，官方可能觉得这样写不太优雅，所以有了这个todo
     ;((currentReducer as unknown) as Reducer<
       newState,
       NewActions
@@ -216,8 +216,9 @@ function createStore<S, A extends Action, Ext = {}, StateExt = never>(
 
     // 此操作具有与 ActionTypes.INIT 类似的效果。
     // 新旧 rootReducer 中都存在的所有 reducers
-    // 会收到之前的 state。有效地填充
-    // 新 state tree，其中包含旧s tate tree 中的任何相关数据
+    // 会收到之前的 state
+    // 新 state tree，其中包含旧 state tree 中的任何相关数据
+    // 触发一次REPLACE类型的action用于使用最新的reducer更新当前store中state数据
     dispatch({ type: ActionTypes.REPLACE } as A)
 
     // store 类型转化为 new store 的类型
@@ -272,8 +273,8 @@ function createStore<S, A extends Action, Ext = {}, StateExt = never>(
   }
 
   // 创建store 后，将 dispatch 'INIT' 操作，以便每个
-  // reducer返回其初始状态。有效地填充
-  // 初始 state tree。
+  // reducer返回其初始状态。
+  // 初始化 state tree。
   dispatch({ type: ActionTypes.INIT } as A)
 
   const store = ({
