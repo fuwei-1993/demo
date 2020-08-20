@@ -53,14 +53,17 @@ function getUnexpectedStateShapeWarningMessage(
     )
   }
 
+  // 过滤出 reducers 和 unexpectedKeyCache 都没有 inputState 中的key
   const unexpectedKeys = Object.keys(inputState).filter(
     (key) => !reducers.hasOwnProperty(key) && !unexpectedKeyCache[key]
   )
 
+  // unexpectedKeys 添加 unexpectedKeys 的 key 并且赋值为 true
   unexpectedKeys.forEach((key) => {
     unexpectedKeyCache[key] = true
   })
 
+  // 如果是走的 ActionTypes.REPLACE 就 return ， 就是说走的 replaceReducer
   if (action?.type === ActionTypes.REPLACE) return
 
   if (unexpectedKeys.length > 0) {
@@ -73,6 +76,7 @@ function getUnexpectedStateShapeWarningMessage(
   }
 }
 
+// 断言 reducer 的边界
 function assertReducerShape(reducers: ReducersMapObject) {
   Object.keys(reducers).forEach((key) => {
     const reducer = reducers[key]
@@ -136,21 +140,26 @@ function combineReducers<M extends ReducersMapObject>(
 function combineReducers(reducers: ReducersMapObject) {
   const reducerKeys = Object.keys(reducers)
   const finalReducers: ReducersMapObject = {}
+  // 把所有 reducer 的 key 取出来
   for (let i = 0; i < reducerKeys.length; i++) {
     const key = reducerKeys[i]
 
+    // 开发环境的话 发现一reducer是 undefined 就 warning
     if (process.env.NODE_ENV !== 'production') {
       if (typeof reducers[key] === 'undefined') {
         warning(`No reducer provided for key "${key}"`)
       }
     }
 
+    // 如果 reducer 是函数就赋值给刚才创建好的 finalReducers 中
     if (typeof reducers[key] === 'function') {
       finalReducers[key] = reducers[key]
     }
   }
 
+  // 取出是函数的 reducer key
   const finalReducerKeys = Object.keys(finalReducers)
+
 
   // This is used to make sure we don't warn about same
   // key multiple times
@@ -189,21 +198,33 @@ function combineReducers(reducers: ReducersMapObject) {
     }
 
     let hasChanged = false
+
+    // StateFromReducersMapObject key 是reducers 的 key 然后值是 reducer 里的 state
     const nextState: StateFromReducersMapObject<typeof reducers> = {}
     for (let i = 0; i < finalReducerKeys.length; i++) {
+      // 取出 是函数的 reducer 的key
       const key = finalReducerKeys[i]
+      // 取出 reducer
       const reducer = finalReducers[key]
+      // 看命名表示的 上一次的 state 中 key 是reducer key的值
+      // 可以推测出这里的 state 结构应该是 { [key]: state } 
       const previousStateForKey = state[key]
+      // 获取下一次 state
       const nextStateForKey = reducer(previousStateForKey, action)
       if (typeof nextStateForKey === 'undefined') {
         const errorMessage = getUndefinedStateErrorMessage(key, action)
         throw new Error(errorMessage)
       }
+      // 将下一次 state 存进 nextState
       nextState[key] = nextStateForKey
+
+      // 判断上一次是否等于下一次 来确定它是否变化
       hasChanged = hasChanged || nextStateForKey !== previousStateForKey
     }
     hasChanged =
       hasChanged || finalReducerKeys.length !== Object.keys(state).length
+
+    // 变化来取下一个 state , 没有取当前的
     return hasChanged ? nextState : state
   }
 }
