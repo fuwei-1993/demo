@@ -116,7 +116,7 @@ const macroTask = new MacroTask()
 
 
 
-function simulatExecution() {
+function simulateExecution() {
 
   executor([
     macroTask.add(() => {
@@ -147,4 +147,4 @@ function simulatExecution() {
 
 }
 
-simulatExecution()
+simulateExecution()
