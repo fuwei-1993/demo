@@ -63,7 +63,7 @@ function decimalToBinary(decNumber) {
     number = Math.floor(number / 2)
   }
 
-  while(!remStack.isEmpty()) {
+  while (!remStack.isEmpty()) {
     binaryString += remStack.pop().toString()
   }
 
@@ -80,20 +80,20 @@ function baseConverter(decNumber, base) {
   const remStack = new Stack()
   let baseString = ''
 
-  if(base < 2 || base > 36) return ''
+  if (base < 2 || base > 36) return ''
 
-  while(number > 0) {
+  while (number > 0) {
     const rem = Math.floor(number % base)
     remStack.push(rem)
-    number = Math.floor(number / base) 
+    number = Math.floor(number / base)
   }
 
-  while(!remStack.isEmpty()) {
+  while (!remStack.isEmpty()) {
     baseString += digits[remStack.pop()]
   }
 
   return baseString
 }
 
-console.log(baseConverter(10, 2)); 
-console.log(baseConverter(10, 16)); 
+console.log(baseConverter(10, 2))
+console.log(baseConverter(10, 16))
