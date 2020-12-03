@@ -20,7 +20,7 @@ class Stack {
   }
 
   peek() {
-    if (!this.isEmpty()) return this[_items][this[_count - 1]]
+    if (!this.isEmpty()) return this[_items][this[_count] - 1]
     return undefined
   }
 
@@ -97,3 +97,50 @@ function baseConverter(decNumber, base) {
 
 console.log(baseConverter(10, 2))
 console.log(baseConverter(10, 16))
+
+// 实践 3 、 是来自 leetCode 简单的括号算法问题
+// 实现 () {} [] {()} [()] ....
+
+function isValid(anyString) {
+  const len = anyString.length
+
+  if (len % 2 !== 0) return false
+
+  const stringStack = new Stack()
+
+  for (let i = 0; i < len; i++) {
+    switch (anyString[i]) {
+      case '(':
+        stringStack.push('(')
+        break
+      case '{':
+        stringStack.push('{')
+        break
+      case '[':
+        stringStack.push('[')
+        break
+      case ']':
+        if (stringStack.peek() === '[') {
+          stringStack.pop()
+        }
+        break
+      case '}':
+        if (stringStack.peek() === '{') {
+          stringStack.pop()
+        }
+        break
+      case ')':
+        if (stringStack.peek() === '(') {
+          stringStack.pop()
+        }
+        break
+    }
+  }
+
+  return stringStack.size() === 0
+}
+
+console.log(isValid('[](){}'));
+console.log(isValid('[][]'));
+console.log(isValid('{[()]}'));
+console.log(isValid('[]()[}'));
