@@ -35,3 +35,4 @@ function insertSort(arr) {
 
 console.log(insertSort([1, 2, 22, 1, 222, 33, 4, 5]))
 
+// 二分插入排序
