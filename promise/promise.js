@@ -79,7 +79,7 @@ class MyPromise {
         : (error) => {
             throw error
           }
-    this.promise2 = new Promise((resolve, reject) => {
+    this.promise2 = new MyPromise((resolve, reject) => {
       const curryResolvePromise = this.resolvePromiseAsync(resolve, reject)
       const callbacks = this.callbackFactory({
         onFulfilled,
@@ -164,7 +164,7 @@ const a = new MyPromise((r) => {
 })
   .then(
     (res) => {
-      return { then: 234 }
+      return MyPromise.reject({ then: 234 }) 
     },
     (err) => {
       console.log(err)
