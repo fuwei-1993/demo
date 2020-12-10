@@ -12,6 +12,28 @@ class MyPromise {
   onFulfilledCallbacks = []
   onRejectedCallbacks = []
 
+  static all = (promises) => {
+    const result = []
+    return new MyPromise((resolve, reject) => {
+      promises.forEach((p) => {
+        p.then((val) => {
+          result.push(val)
+          if (result.length === promises.length) {
+            resolve(result)
+          }
+        }, reject)
+      })
+    })
+  }
+
+  static race = (promises) => {
+    return new MyPromise((resolve, reject) => {
+      promises.forEach(p => {
+        p.then(resolve, reject)
+      })
+    })  
+  }
+
   static resolve = (value) => {
     return new MyPromise((r) => {
       r(value)
@@ -119,6 +141,10 @@ class MyPromise {
 
     return this.promise2
   }
+
+  catch(onRejected) {
+    return this.then(null, onRejected)
+  }
 }
 
 const a = new MyPromise((r) => {
@@ -139,17 +165,10 @@ a.then((val) => {
   console.log('third then', val)
 })
 
-// new Promise((r) => {
-//   setTimeout(() => {
-//     r(1)
-//   }, 300)
-// })
-//   .then((val) => {
-//     console.log(val)
-//     return new Promise((r) => {
-//       r(3)
-//     })
-//   })
-//   .then((val) => {
-//     console.log(val)
-//   })
+MyPromise.race([new MyPromise((r) => r(1)), new MyPromise((r, reject) => reject(2))]).then(
+  (v) => {
+    console.log(v)
+  }, (e) => {
+    console.log(e)
+  }
+)
