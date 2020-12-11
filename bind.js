@@ -42,3 +42,12 @@ if (
 ) {
   console.log('success')
 }
+
+function newFn(target, ...params) {
+  const resultObj = {}
+  resultObj.__proto__ = target.prototype
+  target.apply(resultObj, params)
+  return resultObj
+}
+
+console.log(newFn(Animal,'fuwei', 'white'))
