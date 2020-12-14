@@ -7,12 +7,15 @@
 </head>
 <body>
   <script>
-    const fetchApi = (data) => {
-      console.log(data)
-    }
+    const url = './jsonp.js?callback=fetchApi'
+    const [ matchQuery ] = url.match(/([^?]+)=([^?]+)/g)
+    const [, callBackName] = matchQuery.split('=')
+    
+    eval(`var ${callBackName} = (data) => { console.log(data) }`)
 
     const scriptTag = document.createElement('script')
-    scriptTag.src = './jsonp.js?callback=fetchApi'
+   
+    scriptTag.src = url
     scriptTag.async = true
     document.head.appendChild(scriptTag)
   </script>
