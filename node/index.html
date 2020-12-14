@@ -1,23 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
 </head>
+
 <body>
   <script>
     const url = './jsonp.js?callback=fetchApi'
-    const [ matchQuery ] = url.match(/([^?]+)=([^?]+)/g)
+    const [matchQuery] = url.match(/([^?]+)=([^?]+)/g)
     const [, callBackName] = matchQuery.split('=')
-    
+
     eval(`var ${callBackName} = (data) => { console.log(data) }`)
 
     const scriptTag = document.createElement('script')
-   
+
     scriptTag.src = url
     scriptTag.async = true
     document.head.appendChild(scriptTag)
   </script>
 </body>
+
 </html>
