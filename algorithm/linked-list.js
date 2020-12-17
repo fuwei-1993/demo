@@ -238,3 +238,10 @@ dList.insert(11, 2)
 
 console.log(dList.indexOf(15), dList.indexOf(11))
 console.log(dList)
+
+// 循环链表 : 实质上就是在双向或单向链表的基础上增加 将tail的指针指向head
+class CircularLinkedList extends LinkedList {
+  constructor(equalsFn = defaultEquals) {
+    super(equalsFn)
+  }
+}
