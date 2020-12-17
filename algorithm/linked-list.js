@@ -1,4 +1,8 @@
 // 单向链表
+function defaultEquals(a, b) {
+  return a === b
+}
+
 class Node {
   constructor(element) {
     this.element = element
@@ -9,13 +13,12 @@ class Node {
 class LinkedList {
   head = null
   count = 0
-
-  equalsFn(a, b) {
-    return a === b
+  constructor(equalsFn = defaultEquals) {
+    this.equalsFn = equalsFn
   }
 
-  push(element) {
-    const node = new Node(element)
+  push(element, NodeClass = Node) {
+    const node = new NodeClass(element)
     let current
     if (!this.head) {
       this.head = node
@@ -28,10 +31,12 @@ class LinkedList {
     }
 
     this.count++
+
+    return node
   }
 
   insert(element, index) {
-    if (index < 0 || index >= this.count) return false
+    if (index < 0 || index > this.count) return false
 
     const node = new Node(element)
 
@@ -149,7 +154,87 @@ list.push(10)
 
 list.removeAt(2)
 
-list.insert(11, 0)
+list.insert(11, 2)
 
 console.log(list.indexOf(15), list.indexOf(11))
 console.log(list.toString())
+
+// 双向链表
+
+class DoublyNode extends Node {
+  constructor(element, next, prev) {
+    super(element, next)
+    this.prev = prev
+  }
+}
+
+class DoublyLinkedList extends LinkedList {
+  constructor(equalsFn = defaultEquals) {
+    super(equalsFn)
+    this.tail = undefined
+  }
+
+  push(element) {
+    const node = super.push(element, DoublyNode)
+    if(!this.tail)  {
+      this.tail = node
+    } else {
+      const current = this.tail
+      current.next = node
+      node.prev = current
+      this.tail = node
+    }
+  }
+
+  insert(element, index) {
+    const node = new DoublyNode(element)
+    if (index < 0 || index > this.count) return false
+    
+    if (index === 0) {
+      if (this.head) {
+        const current = this.head
+        node.next = current
+        current.prev = node
+      } else {
+        this.tail = node
+      }
+      this.head = node
+      
+      this.count++
+      return true
+    }
+
+    if (index === this.count) {
+      const current = this.tail
+      current.next = node
+      this.tail = node
+      node.prev = current
+
+      this.count++
+      return true
+    }
+
+    const previous = this.getElementAt(index - 1)
+    const current = previous.next
+
+    node.prev = previous
+    node.next = current
+    previous.next = node
+    current.prev = node
+
+    this.count++
+    return true
+  }
+}
+
+const dList = new DoublyLinkedList()
+
+dList.push(15)
+dList.push(10)
+
+dList.removeAt(2)
+
+dList.insert(11, 2)
+
+console.log(dList.indexOf(15), dList.indexOf(11))
+console.log(dList)
