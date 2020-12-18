@@ -28,10 +28,10 @@ class MyPromise {
 
   static race = (promises) => {
     return new MyPromise((resolve, reject) => {
-      promises.forEach(p => {
+      promises.forEach((p) => {
         p.then(resolve, reject)
       })
-    })  
+    })
   }
 
   static resolve = (value) => {
@@ -165,10 +165,48 @@ a.then((val) => {
   console.log('third then', val)
 })
 
-MyPromise.race([new MyPromise((r) => r(1)), new MyPromise((r, reject) => reject(2))]).then(
+MyPromise.race([
+  new MyPromise((r) => r(1)),
+  new MyPromise((r, reject) => reject(2)),
+]).then(
   (v) => {
     console.log(v)
-  }, (e) => {
+  },
+  (e) => {
     console.log(e)
   }
 )
+
+// 利用promise.all处理并发但是相应的一个挂了 全部就挂了
+
+const urls = ['a', 'b', 'c', 'd', 'e']
+
+function combineUrlWithPromise(urls) {
+  return urls.map(
+    (url) =>
+      new MyPromise((r) => {
+        setTimeout(() => {
+          r(url)
+        }, 800)
+      })
+  )
+}
+
+function concurrentControl(urls, numbers) {
+  if (numbers >= urls.length) {
+    return MyPromise.all(combineUrlWithPromise(urls))
+  }
+
+  const curUrls = urls.slice(0, numbers)
+  const nextUrls = urls.slice(numbers)
+
+  return MyPromise.all(combineUrlWithPromise(curUrls)).then((res1) => {
+    return concurrentControl(nextUrls, numbers).then((res) => {
+      return [...res1, ...res]
+    })
+  })
+}
+
+concurrentControl(urls, 2).then((res) => {
+  console.log(res)
+})
