@@ -176,7 +176,7 @@ class DoublyLinkedList extends LinkedList {
 
   push(element) {
     const node = super.push(element, DoublyNode)
-    if(!this.tail)  {
+    if (!this.tail) {
       this.tail = node
     } else {
       const current = this.tail
@@ -189,7 +189,7 @@ class DoublyLinkedList extends LinkedList {
   insert(element, index) {
     const node = new DoublyNode(element)
     if (index < 0 || index > this.count) return false
-    
+
     if (index === 0) {
       if (this.head) {
         const current = this.head
@@ -199,7 +199,7 @@ class DoublyLinkedList extends LinkedList {
         this.tail = node
       }
       this.head = node
-      
+
       this.count++
       return true
     }
@@ -245,3 +245,75 @@ class CircularLinkedList extends LinkedList {
     super(equalsFn)
   }
 }
+
+// 有序链表：是指保持元素有序的链表结构。除了使用排序算法之外，我们可以将元素插入到正确的位置来保证链表的有序性
+
+const Compare = {
+  LESS_THAN: -1,
+  BIGGER_THAN: 1,
+}
+
+function defaultCompare(a, b) {
+  if (a === b) return 0
+
+  return a < b ? Compare.LESS_THAN : Compare.BIGGER_THAN
+}
+
+class SortedLinkedList extends LinkedList {
+  constructor(equalsFn = defaultEquals, compareFn = defaultCompare) {
+    super(equalsFn)
+    this.compareFn = compareFn
+  }
+
+  /**
+   * 不允许在任意位置插入，否则会破坏链表的有序性
+   * @param {*} element
+   * @param {number} index
+   */
+  insert(element, index = 0) {
+    if (this.isEmpty()) {
+      return super.insert(element, 0)
+    }
+    const pos = this.getIndexNextSortedElement(element)
+
+    return super.insert(element, pos)
+  }
+
+  getIndexNextSortedElement(element) {
+    const midPos = Math.floor(this.size() / 2)
+    const midElement = this.getElementAt(midPos)
+
+    let start, end, current
+    if (element >= midElement.element) {
+      start = 0
+      end = midPos
+      current = this.head
+    } else {
+      start = midPos
+      end = this.size()
+      current = midElement
+    }
+
+    for (; start < end; start++) {
+      const com = this.compareFn(element, current.element)
+
+      if (com === Compare.BIGGER_THAN) {
+        return start
+      }
+      current = current.next
+    }
+
+    return start
+  }
+}
+
+const sortedLinkedList = new SortedLinkedList()
+
+sortedLinkedList.push(5)
+sortedLinkedList.push(3)
+sortedLinkedList.push(2)
+sortedLinkedList.push(1)
+
+sortedLinkedList.insert(6)
+sortedLinkedList.insert(4)
+console.log(sortedLinkedList.toString())
