@@ -1,5 +1,9 @@
+// 第350题：两个数组的交集
+// 给定两个数组，编写一个函数来计算它们的交集。
+
 function intersect(numbers1, numbers2) {
   const numMap = {}
+  const result = []
   for (let i = 0; i < numbers1.length; i++) {
     if (numMap[numbers1[i]]) {
       numMap[numbers1[i]]++
@@ -11,13 +15,16 @@ function intersect(numbers1, numbers2) {
   for (let i = 0; i < numbers2.length; i++) {
     if (numMap[numbers2[i]]) {
       numMap[numbers2[i]]--
+      if (!numMap[numbers2[i]]) {
+        result.push(numbers2[i])
+      }
     }
   }
 
-  return numMap
+  return result
 }
 
-// console.log(intersect([1, 2, 3], [3, 4, 5]))
+console.log(intersect([1, 2, 3, 4], [3, 4, 5]))
 
 //  题目在进阶问题中问道：如果给定的数组已经排好序呢？你将如何优化你的算法？我们分析一下，
 //  假如两个数组都是有序的，分别为：arr1 = [1,2,3,4,4,13]，arr2 = [1,2,3,9,10]
