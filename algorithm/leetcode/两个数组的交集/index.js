@@ -33,14 +33,13 @@ function intersect2(numbers1, numbers2) {
     } else if (numbers1[i] > numbers2[j]) {
       j++
     } else if (numbers1[i] === numbers2[j]) {
-      result.push(numbers1[i])
       k++
       j++
       i++
     }
   }
 
-  return result
+  return numbers1.slice(0, k)
 }
 
 console.log(intersect2([1, 2, 3, 4, 4, 13], [1, 2, 3, 9, 10]))
