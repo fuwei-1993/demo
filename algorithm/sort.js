@@ -14,6 +14,23 @@ const arr = [1, 2, 3, 4, 5, 6, 7, 8]
 
 console.log(fisherYatesShuffle(arr))
 
+// 冒泡排序
+
+function bubbleSort(arr) {
+  for (let i = 0; i < arr.length - 1; i++) {
+    for (let j = 0; j < arr.length - i; j++) {
+      if (arr[j] >= arr[j + 1]) {
+        const temp = arr[j]
+        arr[j] = arr[j + 1]
+        arr[j + 1] = temp
+      }
+    }
+  }
+  return arr
+}
+
+bubbleSort([5, 4, 3, 2, 3, 1])
+
 // 插入排序 理论上是一个个插进新的数组
 
 function insertSort(arr) {
