@@ -32,4 +32,16 @@ console.log(climbStairs(8))
 function climbStairs2(n) {
   return n < 2 ? 1 : climbStairs2(n - 1) + climbStairs2(n - 2)
 }
-console.log(climbStairs2(8))
+
+// 同类问题
+// 银币的最小个数 银币有面额 1 4 5三种
+function minCoins(n) {
+  if (n < 4) return n
+  if (n < 5) {
+    return (n % 4) + n / 4
+  }
+
+  return minCoins(n % 5) + Math.floor(n / 5)
+}
+
+console.log(minCoins(21))
