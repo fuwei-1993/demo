@@ -148,3 +148,47 @@ console.log(detectCycle(listNode))
 // Input: S = "ADOBECODEBANC", T = "ABC"
 // Output: "BANC"
 // 在这个样例中，S 中同时包含一个 A、一个 B、一个 C 的最短子字符串是“BANC”。
+/**
+ *
+ * @param {string} S
+ * @param {string} T
+ */
+function minWindow(S, T) {
+  const collectS = {}
+  const flag = {}
+  for (let i = 0; i < T.length; i++) {
+    if (collectS[T[i]]) {
+      collectS[T[i]]++
+    } else {
+      collectS[T[i]] = 1
+    }
+    flag[T[i]] = true
+  }
+
+  let count = 0,
+    l = 0,
+    minL = 0,
+    minLen = S.length + 1
+
+  for (let r = 0; r < S.length; r++) {
+    if (flag[S[r]] && --collectS[S[r]] >= 0) {
+      count++
+    }
+
+    while (count === T.length) {
+      console.log(l, r)
+      if (r - l + 1 < minLen) {
+        minLen = r - l + 1
+        minL = l
+      }
+      if (flag[S[l]] && ++collectS[S[l]] > 0) {
+        count--
+      }
+      l++
+    }
+  }
+
+  return minLen > S.length ? '' : S.substr(minL, minLen)
+}
+
+console.log(minWindow('ADOBECODEBANC', 'ABC'))
