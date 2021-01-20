@@ -58,3 +58,104 @@ function mySqrt(a) {
 }
 
 console.log(mySqrt(8))
+
+// 4.3 查找区间
+// 34. Find First and Last Position of Element in Sorted Array (Medium)
+// 4.3 查找区间 – 16/143 –
+// 题目描述
+// 给定一个增序的整数数组和一个值，查找该值第一次和最后一次出现的位置。
+// 输入输出样例
+// 输入是一个数组和一个值，输出为该值第一次出现的位置和最后一次出现的位置（从 0 开
+// 始）；如果不存在该值，则两个返回值都设为-1。
+// Input: nums = [5,7,7,8,8,10], target = 8
+// Output: [3,4]
+// 数字 8 在第 3 位第一次出现，在第 4 位最后一次出现。
+// 复杂度为O(log n)
+
+function searchRange(numbers, target) {
+  let result = [-1, -1]
+  if (!numbers.length) return result
+
+  const first = lowerBound(numbers, target)
+  const second = upperBound(numbers, target) - 1
+
+  if (numbers[first] !== target || first === target.length - 1) return result
+  result = [first, second]
+
+  return result
+}
+
+function lowerBound(numbers, target) {
+  let l = 0,
+    r = numbers.length - 1,
+    mid
+  while (l < r) {
+    mid = Math.floor((l + r) / 2)
+    if (numbers[mid] >= target) {
+      r = mid
+    } else {
+      l = mid + 1
+    }
+  }
+  return l
+}
+
+function upperBound(numbers, target) {
+  let l = 0,
+    r = numbers.length - 1,
+    mid
+  while (l < r) {
+    mid = Math.floor((l + r) / 2)
+    if (numbers[mid] > target) {
+      r = mid
+    } else {
+      l = mid + 1
+    }
+  }
+  return numbers[l] === target ? l + 1 : l
+}
+
+console.log(searchRange([5, 7, 7, 8, 8, 10], 8))
+
+// 4.4 旋转数组查找数字
+// 81. Search in Rotated Sorted Array II (Medium)
+// 题目描述
+// 一个原本增序的数组被首尾相连后按某个位置断开（如 [1,2,2,3,4,5] → [2,3,4,5,1,2]，在第一
+// 位和第二位断开），我们称其为旋转数组。给定一个值，判断这个值是否存在于这个为旋转数组
+// 中。
+// 输入输出样例
+// 输入是一个数组和一个值，输出是一个布尔值，表示数组中是否存在该值。
+// Input: nums = [2,5,6,0,0,1,2], target = 0
+// Output: true
+
+function search(numbers, target) {
+  let start = 0,
+    end = numbers.length - 1,
+    mid
+
+  while (start < end) {
+    mid = Math.floor((start + end) / 2)
+    if (numbers[mid] === target) {
+      return true
+    }
+
+    if (numbers[start] === numbers[mid]) {
+      start++
+    } else if (numbers[mid] <= numbers[end]) {
+      if (numbers[mid] < target && numbers[end] >= target) {
+        start = mid + 1
+      } else {
+        end = mid - 1
+      }
+    } else {
+      if (target >= numbers[start] && numbers[mid] > target) {
+        end = mid - 1
+      } else {
+        start = mid + 1
+      }
+    }
+  }
+  return false
+}
+
+console.log(search([2,5,6,0,0,1,2], 0))
