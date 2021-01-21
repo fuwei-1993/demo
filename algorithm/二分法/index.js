@@ -133,7 +133,7 @@ function search(numbers, target) {
     end = numbers.length - 1,
     mid
 
-  while (start < end) {
+  while (start <= end) {
     mid = Math.floor((start + end) / 2)
     if (numbers[mid] === target) {
       return true
