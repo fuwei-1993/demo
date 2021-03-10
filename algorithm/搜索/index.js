@@ -199,3 +199,37 @@ function dfs(ans, numbers, temp, visited) {
 }
 
 console.log(permute([1, 2, 3]))
+
+// 77. Combinations (Medium)
+// 题目描述
+// 给定一个整数 n 和一个整数 k，求在 1 到 n 中选取 k 个数字的所有组合方法。
+// 输入输出样例
+// 输入是两个正整数 n 和 k，输出是一个二维数组，表示所有组合方式。
+// Input: n = 4, k = 2
+// Output: [[2,4], [3,4], [2,3], [1,2], [1,3], [1,4]]
+// 这里二维数组的每个维度都可以以任意顺序输出。
+/**
+ *
+ * @param {number} n
+ * @param {number} k
+ */
+function combinations(n, k) {
+  const result = []
+  function dfs(n, k, visited, pos) {
+    if (k === 0) {
+      result.push([...visited])
+      return
+    }
+    for (let i = pos; i <= n; i++) {
+      visited.push(i)
+
+      dfs(n, k - 1, visited, i + 1)
+      visited.length -= 1
+    }
+  }
+
+  dfs(n, k, [], 1)
+  return result
+}
+
+combinations(8, 2)
