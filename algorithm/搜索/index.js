@@ -233,3 +233,60 @@ function combinations(n, k) {
 }
 
 combinations(8, 2)
+
+// 79. Word Search (Medium)
+// 题目描述
+// 给定一个字母矩阵，所有的字母都与上下左右四个方向上的字母相连。给定一个字符串，求
+// 字符串能不能在字母矩阵中寻找到。
+// 输入输出样例
+// 输入是一个二维字符数组和一个字符串，输出是一个布尔值，表示字符串是否可以被寻找
+// 到。
+// Input: word = "ABCCED", board =
+// [[’A’,’B’,’C’,’E’],
+// [’S’,’F’,’C’,’S’],
+// [’A’,’D’,’E’,’E’]]
+// Output: true
+// 从左上角的’A’ 开始，我们可以先向右、再向下、最后向左，找到连续的"ABCCED"。
+
+function wordSearch(word, board) {
+  let find = false
+  const visited = createVisited(board)
+
+  function findMatchString(i, j, currentIdx, visited) {
+    if (i < 0 || i > board.length - 1) return
+    if (j < 0 || j > board[i].length - 1) return
+    if (visited[i][j] || word[currentIdx] !== board[i][j] || find) return
+    if (currentIdx === word.length - 1)  return find = true
+    
+    visited[i][j] = true
+    findMatchString(i - 1, j, currentIdx + 1, visited)
+    findMatchString(i + 1, j, currentIdx + 1, visited)
+    findMatchString(i, j - 1, currentIdx + 1, visited)
+    findMatchString(i, j + 1, currentIdx + 1, visited)
+    visited[i][j] = false
+    return
+  }
+
+  for (let i = 0; i < board.length; i++) {
+    for (let j = 0; j < board[i].length; j++) {
+      findMatchString(i, j, 0, visited)
+    }
+  }
+
+  return find
+}
+
+function createVisited(board) {
+  const visited = []
+  for (let i = 0; i < board.length; i++) {
+    visited.push([])
+  }
+  return visited
+}
+
+const a = wordSearch('ABCCED', [
+  ['A', 'B', 'C', 'E'],
+  ['S', 'F', 'C', 'S'],
+  ['A', 'D', 'E', 'E'],
+])
+console.log(a)
