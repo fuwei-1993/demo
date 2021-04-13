@@ -256,8 +256,8 @@ function wordSearch(word, board) {
     if (i < 0 || i > board.length - 1) return
     if (j < 0 || j > board[i].length - 1) return
     if (visited[i][j] || word[currentIdx] !== board[i][j] || find) return
-    if (currentIdx === word.length - 1)  return find = true
-    
+    if (currentIdx === word.length - 1) return (find = true)
+
     visited[i][j] = true
     findMatchString(i - 1, j, currentIdx + 1, visited)
     findMatchString(i + 1, j, currentIdx + 1, visited)
@@ -284,9 +284,98 @@ function createVisited(board) {
   return visited
 }
 
-const a = wordSearch('ABCCED', [
+wordSearch('ABCCED', [
   ['A', 'B', 'C', 'E'],
   ['S', 'F', 'C', 'S'],
   ['A', 'D', 'E', 'E'],
 ])
-console.log(a)
+
+// 51. N-Queens (Hard)
+
+// 题目描述
+// 给定一个大小为 n 的正方形国际象棋棋盘，求有多少种方式可以放置 n 个皇后并使得她们互
+// 不攻击，即每一行、列、左斜、右斜最多只有一个皇后。
+// 图 6.1: 题目 51 - 八皇后的一种解法
+// 输入输出样例
+// 输入是一个整数 n，输出是一个二维字符串数组，表示所有的棋盘表示方法。
+// Input: 4
+// Output: [
+// [".Q..", // Solution 1
+// "...Q",
+// "Q...",
+// "..Q."],
+// ["..Q.", // Solution 2
+// "Q...",
+// "...Q",
+// ".Q.."]
+// ]
+// 在这个样例中，点代表空白位置，Q 代表皇后。
+/**
+ *
+ * @param {number} n
+ */
+function solveNQueens(n) {
+  const chess = createQueensChess(n)
+  const result = []
+  function resolve(chess, row) {
+    if (chess.length === row) {
+      result.push(chess)
+      return 
+    }
+
+    for (let i = 0; i < n; i++) {
+      if (validate(chess, row, i)) {
+        const temp = copy(chess)
+        temp[row][i] = 'Q'
+        resolve(temp, row + 1)
+      }
+    }
+  }
+
+  function copy(target) {
+    return target.map((item) => [...item])
+  }
+
+  function validate(chess, row, col) {
+
+    for(let i = 0; i < row; i++) {
+      if(chess[i][col] === 'Q') {
+        return false
+      }
+    }
+
+    for(let i = row - 1, j = col - 1; i >=0 && j >= 0;i--,j--) {
+      if(chess[i][j] === 'Q') {
+        return false
+      }
+    }
+  
+    for(let i = row - 1, j = col + 1; i > 0 && j < n ;i--,j++) {
+      if(chess[i][j] === 'Q') {
+        return false
+      }
+    }
+
+    return true
+  }
+
+  resolve(chess, 0)
+
+  return result
+}
+
+function createQueensChess(n) {
+  const result = []
+  for (let i = 0; i < n; i++) {
+    result[i] = []
+    for (let j = 0; j < n; j++) {
+      result[i].push('.')
+    }
+  }
+
+  return result
+}
+
+
+console.log(solveNQueens(4))
+
