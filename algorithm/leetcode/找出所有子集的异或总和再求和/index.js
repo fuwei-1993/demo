@@ -47,7 +47,7 @@ function subsetXORSum(nums) {
   const result = []
   const map = nums.reduce((_,i) => ({ [i]: false }), {})
 
-  function dep(index, target = [], map, n) {
+  function dfs(index, target = [], map, n) {
     if (target.length === n) {
       result.push(target.reduce((result, curr) => result ^ curr))
       return
@@ -57,14 +57,14 @@ function subsetXORSum(nums) {
       const value = nums[i]
       if (!map[i]) {
         map[i] = true
-        dep(i + 1, [...target, value], map, n)
+        dfs(i + 1, [...target, value], map, n)
         map[i] = false
       }
     }
   }
 
   for (let i = 1; i <= nums.length; i++) {
-    dep(0, [], map, i)
+    dfs(0, [], map, i)
   }
 
   return result.reduce((result, curr) => result + curr)
