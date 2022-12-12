@@ -46,11 +46,24 @@ class BinarySearchTree {
     }
   }
 
+  searchNode(node, key) {
+    if(!node) return false
+    if(this.compareFn(node.key, key) === Compare.MORE_THAN) {
+      return this.searchNode(node.right, key)
+    } else if (key < node.key){
+      return this.searchNode(node.left, key)
+    } else {
+      return true
+    }
+  }
+
   // 在树中查找节点如果有就返回true如果没有就返回false
-  search(key) {}
+  search(key) {
+    return this.searchNode(this.root, key)
+  }
 
   inOrderTraverseNode(node, callback) {
-    if(node) {
+    if (node) {
       this.inOrderTraverseNode(node.left, callback)
       callback(node.key)
       this.inOrderTraverseNode(node.right, callback)
@@ -64,7 +77,7 @@ class BinarySearchTree {
   }
 
   preOrderTraverseNode(node, callback) {
-    if(node) {
+    if (node) {
       callback(node.key)
       this.preOrderTraverseNode(node.left, callback)
       this.preOrderTraverseNode(node.right, callback)
@@ -76,8 +89,9 @@ class BinarySearchTree {
     this.preOrderTraverseNode(this.root, callback)
   }
 
-  postOrderTraverseNode(node,callback) {
-    if(node) { // 7
+  postOrderTraverseNode(node, callback) {
+    if (node) {
+      // 7
       this.postOrderTraverseNode(node.left, callback) // 3,6,5
       this.postOrderTraverseNode(node.right, callback) // 8 10 9
       callback(node.key) // 5
@@ -89,10 +103,32 @@ class BinarySearchTree {
     this.postOrderTraverseNode(this.root, callback)
   }
 
+  minNode(node) {
+    let current = node
+
+    while (current.left) {
+      current = current.left
+    }
+    return current.key
+  }
+
   // 返回树中最小值的key
-  min() {}
+  min() {
+    return this.minNode(this.root)
+  }
+
+  maxNode(node) {
+    let current = node
+
+    while (current.right) {
+      current = current.right
+    }
+    return current.key
+  }
   // 返回树中最大值的key
-  max() {}
+  max() {
+    return this.maxNode(this.root)
+  }
 
   // 移除树中某个key值
   remove() {}
@@ -126,7 +162,10 @@ binaryTree.insert(6)
 //   console.log(k);
 // })
 
-binaryTree.postOrderTraverse((k) => {
-  console.log(k);
-})
+// binaryTree.postOrderTraverse((k) => {
+//   console.log(k)
+// })
 
+console.log(binaryTree.min());
+console.log(binaryTree.max());
+console.log(binaryTree.search(11));
