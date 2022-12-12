@@ -49,14 +49,45 @@ class BinarySearchTree {
   // 在树中查找节点如果有就返回true如果没有就返回false
   search(key) {}
 
+  inOrderTraverseNode(node, callback) {
+    if(node) {
+      this.inOrderTraverseNode(node.left, callback)
+      callback(node.key)
+      this.inOrderTraverseNode(node.right, callback)
+    }
+  }
+
   // 通过中序遍历方式遍历所有节点
-  inOderTraverse() {}
+  // 递增查询从左到右 从大到小
+  inOrderTraverse(callback) {
+    this.inOrderTraverseNode(this.root, callback)
+  }
+
+  preOrderTraverseNode(node, callback) {
+    if(node) {
+      callback(node.key)
+      this.preOrderTraverseNode(node.left, callback)
+      this.preOrderTraverseNode(node.right, callback)
+    }
+  }
 
   // 通过先序遍历遍历所有节点
-  preOrderTraverse() {}
+  preOrderTraverse(callback) {
+    this.preOrderTraverseNode(this.root, callback)
+  }
+
+  postOrderTraverseNode(node,callback) {
+    if(node) { // 7
+      this.postOrderTraverseNode(node.left, callback) // 3,6,5
+      this.postOrderTraverseNode(node.right, callback) // 8 10 9
+      callback(node.key) // 5
+    }
+  }
 
   // 通过后续遍历遍历所有节点
-  postOrderTraverse() {}
+  postOrderTraverse(callback) {
+    this.postOrderTraverseNode(this.root, callback)
+  }
 
   // 返回树中最小值的key
   min() {}
@@ -83,5 +114,19 @@ binaryTree.insert(14)
 binaryTree.insert(20)
 binaryTree.insert(18)
 binaryTree.insert(25)
+binaryTree.insert(6)
 
-console.log(binaryTree)
+// console.log(binaryTree)
+
+// binaryTree.inOderTraverse((k) => {
+//   console.log(k);
+// })
+
+// binaryTree.preOrderTraverse((k) => {
+//   console.log(k);
+// })
+
+binaryTree.postOrderTraverse((k) => {
+  console.log(k);
+})
+
