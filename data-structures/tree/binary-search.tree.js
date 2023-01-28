@@ -130,8 +130,15 @@ class BinarySearchTree {
     return this.maxNode(this.root)
   }
 
+  removeNode(node, key) {
+    if(!node) return null
+    // if(this.compareFn(node.key, key))
+  }
+
   // 移除树中某个key值
-  remove() {}
+  remove(key) {
+    this.root = this.removeNode(this.root, key)
+  }
 }
 
 const binaryTree = new BinarySearchTree()
