@@ -9,9 +9,11 @@ class Node {
 const Compare = {
   LESS_THAN: 'LESS_THAN',
   MORE_THAN: 'MORE_THAN',
+  EQUAL: 'EQUAL',
 }
 
 const defaultCompare = (key, target) => {
+  if (key === target) return Compare.EQUAL
   return key < target ? Compare.MORE_THAN : Compare.LESS_THAN
 }
 
@@ -47,10 +49,10 @@ class BinarySearchTree {
   }
 
   searchNode(node, key) {
-    if(!node) return false
-    if(this.compareFn(node.key, key) === Compare.MORE_THAN) {
+    if (!node) return false
+    if (this.compareFn(node.key, key) === Compare.MORE_THAN) {
       return this.searchNode(node.right, key)
-    } else if (key < node.key){
+    } else if (key < node.key) {
       return this.searchNode(node.left, key)
     } else {
       return true
@@ -109,12 +111,12 @@ class BinarySearchTree {
     while (current.left) {
       current = current.left
     }
-    return current.key
+    return current
   }
 
   // 返回树中最小值的key
   min() {
-    return this.minNode(this.root)
+    return this.minNode(this.root)?.key ?? null
   }
 
   maxNode(node) {
@@ -123,21 +125,49 @@ class BinarySearchTree {
     while (current.right) {
       current = current.right
     }
-    return current.key
+    return current
   }
   // 返回树中最大值的key
   max() {
-    return this.maxNode(this.root)
+    return this.maxNode(this.root)?.key ?? null
   }
 
   removeNode(node, key) {
-    if(!node) return null
-    // if(this.compareFn(node.key, key))
+    if (!node) return null
+    if (this.compareFn(node.key, key) === Compare.MORE_THAN) {
+      node.right = this.removeNode(node.right, key)
+      return node
+    }
+    if (this.compareFn(node.key, key) === Compare.LESS_THAN) {
+      node.left = this.removeNode(node.left, key)
+      return node
+    }
+
+    if (!node.left && !node.right) {
+      node = null
+      return node
+    }
+
+    if (node.left && !node.right) {
+      node = node.left
+      return node
+    }
+
+    if (node.right && !node.left) {
+      node = node.right
+      return node
+    }
+
+    const aux = this.minNode(node.right)
+    node.key =aux.key
+    node.right = this.removeNode(node.right, minKey)
+    return node
   }
 
   // 移除树中某个key值
   remove(key) {
     this.root = this.removeNode(this.root, key)
+    return this.root
   }
 }
 
@@ -173,6 +203,7 @@ binaryTree.insert(6)
 //   console.log(k)
 // })
 
-console.log(binaryTree.min());
-console.log(binaryTree.max());
-console.log(binaryTree.search(11));
+console.log(binaryTree.min())
+console.log(binaryTree.max())
+console.log(binaryTree.search(11))
+console.log(binaryTree.remove(15))
