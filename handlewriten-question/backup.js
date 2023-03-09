@@ -1,4 +1,4 @@
-export default [
+const template = [
   {
     name: 'Home',
     path: '/',
@@ -323,7 +323,7 @@ class Translate {
   }
 
   get routes () {
-    return this.routesTranslateFor(this.marketingRoutes) 
+    return this.routesTranslateFor(this.marketingRoutes)
   }
 
   getIGrowthRouteNames(iGrowthRoutes) {
