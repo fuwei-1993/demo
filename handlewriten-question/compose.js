@@ -18,13 +18,29 @@ middleware.push((next) => {
 
 
 let fn = compose(middleware)
+
 fn()
 
 
 // 定义
 // reduce right 最好理解
+/**
+ * f3 = () => m3(() => {})
+ * f2 = () => m2(f3)
+ * f1 = () => m1(f2)
+ * f1()
+ */
 function compose(mids) {
   return mids.reduceRight((result, cur) => {
     return () => cur(result)
   }, () => {})
 }
+
+
+// reduce 不太好理解
+function compose(mids) {
+  return mids.reduce((result, cur) => {
+    // TODO..
+  })
+}
+
