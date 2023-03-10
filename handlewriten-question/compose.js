@@ -38,9 +38,14 @@ function compose(mids) {
 
 
 // reduce 不太好理解
+/**
+ * f1 = (m) => m1(() => m2(m))
+ * f2 = (m) => f1(() => m3(m))
+ * r = (m) => f2(m) // m = () => {}
+ */
 function compose(mids) {
   return mids.reduce((result, cur) => {
-    // TODO..
+    return (curr = () => {}) => result(() => cur(curr))
   })
 }
 
