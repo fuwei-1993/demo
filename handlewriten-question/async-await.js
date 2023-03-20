@@ -33,3 +33,56 @@ function run(gFunc, ...args) {
 }
 
 run(gen, 1)
+
+
+// 例子：
+function delayer (time) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve()
+    }, time)
+  })
+}
+
+async function startDelay() {
+  console.log(1)
+  await delayer(1000)
+  console.log(2)
+  await delayer(2000)
+  console.log(3)
+}
+
+startDelay()
+
+
+// 模拟实现
+function run2(genFunc, ...args) {
+  const gen = genFunc(...args)
+
+  function next(data) {
+    const result = gen.next(data)
+    if(result.done) {
+      return
+    }
+
+    if(result.value.then) {
+      result.value.then((res) => {
+        next(res)
+      })
+    } else {
+      next(result.value)
+    }
+  }
+
+  next()
+}
+
+ function* startDelay2() {
+  console.log(1, 'yield')
+  yield delayer(1000)
+  console.log(2, 'yield')
+  yield delayer(2000)
+  console.log(3, 'yield')
+}
+
+run2(startDelay2)
