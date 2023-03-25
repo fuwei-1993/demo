@@ -25,32 +25,19 @@ function exist(board, word) {
     if (j >= col) return
     if (start >= word.length) return word
     const current = board[i][j]
-    if (current === word[start]) {
-      // top
-      const top = findWord(i - 1, j, start + 1)
-      if(top) {
-        return top
-      }
-      // bottom
-      const bottom = findWord(i + 1, j, start + 1)
 
-      if(bottom) {
-        return bottom
-      }
-      // left
-      const left = findWord(i, j - 1, start + 1)
+    // if (current === word[start]) {
+    board[i][j] = null
 
-      if(left) {
-        return left
-      }
-      // right
-      const right = findWord(i, j + 1, start + 1)
+    const ret =
+      findWord(i - 1, j, start + 1) ||
+      findWord(i + 1, j, start + 1) ||
+      findWord(i, j - 1, start + 1) ||
+      findWord(i, j + 1, start + 1)
 
-      if(right) {
-        return right
-      }
-    }
-    return
+    board[i][j] = current
+    return ret
+    // }
   }
 
   return false
