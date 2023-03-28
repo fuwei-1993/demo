@@ -28,10 +28,14 @@ async function batchRequest(requests, numbers) {
 
 function mockRequest(message) {
   console.log(`发送${message}`)
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     setTimeout(() => {
-      resolve(message)
-    }, 1000)
+      if (10 * Math.random() > 5) {
+        resolve(message)
+      } else {
+        reject(`error: ${message}`)
+      }
+    }, 1000 * Math.random())
   })
 }
 
@@ -44,33 +48,35 @@ function makeReqTasks(mocker, count) {
   return result
 }
 
-// TODO..
+// 正确的方法
 async function concurrentRequestsControl(tasks, limit) {
-  const currentTasks = []
-  const res = []
+  const responses = []
+  const tasksMap = new Map()
 
   for (let i = 0; i < tasks.length; i++) {
     const cur = tasks[i](i)
       .then((res) => {
         console.log(`${res}请求成功`)
-        res[i] = res
-        currentTasks.splice(i, 1)
+        responses[i] = res
+        tasksMap.delete(cur)
+        return res
       })
       .catch((err) => {
-        res[i] = err
-        currentTasks.splice(i, 1)
+        responses[i] = err
+        tasksMap.delete(cur)
       })
 
-    currentTasks.push(cur)
-    if (currentTasks.length == limit) {
-      await Promise.race(currentTasks)
+    tasksMap.set(cur, 0)
+
+    if (tasksMap.size === limit) {
+      await Promise.race([...tasksMap.keys()])
     }
   }
 
-  return Promise.allSettled(currentTasks)
+  return Promise.allSettled([...tasksMap.keys()]).then(() => responses)
 }
-const tasks = makeReqTasks(mockRequest, 10)
-// batchRequest(tasks, 3)
-concurrentRequestsControl(tasks, 1).then((res) => {
-  //   console.log(`这是第${res}个请求`)
+const tasks = makeReqTasks(mockRequest, 20)
+
+concurrentRequestsControl(tasks, 10).then((res) => {
+  console.log(res)
 })
