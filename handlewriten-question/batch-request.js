@@ -73,7 +73,7 @@ async function concurrentRequestsControl(tasks, limit) {
     }
   }
 
-  return Promise.allSettled([...tasksMap.keys()]).then(() => responses)
+  return Promise.allSettled([...tasksMap.keys()]).finally(() => responses)
 }
 const tasks = makeReqTasks(mockRequest, 20)
 
