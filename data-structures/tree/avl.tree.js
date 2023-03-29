@@ -6,3 +6,45 @@
 // 1.本身首先是一棵二叉搜索树。
 // 2.带有平衡条件：每个结点的左右子树的高度之差的绝对值（平衡因子）最多为1。
 // 也就是说，AVL树，本质上是带了平衡功能的二叉查找树（二叉排序树，二叉搜索树）
+
+class Node {
+  constructor(el) {
+    this.el = el
+    this.right = null
+    this.left = null
+    this.height = 1
+  }
+}
+class AvlTree {
+  root = null
+  size = 0
+
+  getHeight(node) {
+    if (!node) return 0
+    return node.height
+  }
+  getSize() {
+    return this.size
+  }
+
+  isEmpty() {
+    return this.size === 0
+  }
+
+  getBalanceFactor(node) {
+    if (!node) return 0
+
+    return this.getHeight(node.left) - this.getHeight(node.right)
+  }
+
+  isBalance(node) {
+    if (!node) return true
+
+    const balance = Math.abs(this.getBalanceFactor(node)) <= 1
+    if (!balance) {
+      return false
+    }
+
+    return isBalance(node.left) && this.isBalance(node.right)
+  }
+}
