@@ -1,0 +1,93 @@
+@import "~cmb-lp-xw-mob/common/styles/variable";
+
+:global {
+  .amount-input {
+    .amount {
+      color: @gray-brwon;
+      font-size: @font-size-decimal;
+      display: flex;
+      flex-direction: row-reverse;
+      border-bottom: @white-gray-s 1px solid;
+      align-items: center;
+      padding: @space-sm @space-xsm;
+
+      .symbol {
+        flex: 1;
+        text-align: right;
+        font-size: @font-lg;
+        font-weight: bold;
+        padding-right: 3px;
+
+        &.hide {
+          opacity: 0;
+        }
+      }
+
+      .input {
+        display: flex;
+        position: relative;
+
+        .sizer {
+          font-size: @font-lg;
+          padding: 0 2px;
+          text-align: right;
+          white-space: pre;
+          visibility: hidden;
+        }
+
+        input {
+          text-align: right;
+          border: none;
+          font-size: @font-lg;
+          position: absolute;
+          right: 0;
+          bottom: -1px;
+          width: 100%;
+          padding: 0;
+          margin: 0;
+          font-family: Arial;
+        }
+
+        ::-webkit-input-placeholder {
+          color: rgba(74, 74, 74, 0.5);
+          @media (max-width: 359px) {
+            font-size: @font-size-decimal;
+          }
+        }
+
+        &.focus {
+          .sizer {
+            font-family: Arial;
+          }
+        }
+
+        &.blur {
+          .sizer {
+            visibility: visible;
+          }
+
+          input {
+            opacity: 0;
+          }
+        }
+      }
+
+      &.error {
+        .symbol {
+          color: @light-red;
+        }
+
+        .sizer {
+          color: @light-red;
+        }
+      }
+    }
+
+    .errorMessage {
+      color: @light-red;
+      font-size: @font-sm;
+      padding: @space-xxsm @space-xsm;
+      text-align: right;
+    }
+  }
+}

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <div id="app">
+    <input type="text" v-model="message">
+    <div>{{message}}</div>
+    <ul >
+        <li >{{message}}</li>
+        <li >{{book.price.toFixed(2)}}</li>
+    </ul>
+  </div>
+  <script src="./Watcher.js"></script>
+  <script src="./Observer.js"></script>
+  <script src="./Compile.js"></script>
+  <script src="./MVVM.js"></script>
+  <!-- <script src="https://cdn.jsdelivr.net/npm/vue"></script> -->
+  <script>
+   
+    const vm = new MVVM({
+      el: '#app',
+      data: {
+        message: 'hello world',
+        book:{
+          price : 234
+        }
+      }
+    })
+    
+    function  isArray(...arg) {
+      const cur = arg.findIndex(e=> e.length > 0)
+      const curArg = arg.slice(cur + 1)
+      const next = curArg.find(e=> e.length > 0)
+
+      if(cur === -1) return
+      arg[cur].forEach(e => {
+        e[name] = 123
+        if(next) {
+          console.log(next)
+          next.forEach(el => {
+            el.inner = 234
+          })
+        }
+      })
+      isArray(...curArg)
+
+    }
+
+    const a1 = [{key: 123}]
+    const a2 = [{key: 123}]
+    const a3 = [{key: 123},{key: 123},{key: 123}]
+
+   
+    isArray(a1,[],a3)
+    console.log(a1,a2,a3)
+
+  </script>
+  
+</body>
+</html>
