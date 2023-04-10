@@ -16,11 +16,6 @@ export default class Platform {
     this.land = null
     this.pipes = null
     this.sense = null
-    this.fps = 60
-    this.now = 0
-    this.interval = 1000 / this.fps
-    this.delta
-    this.then = Date.now()
     this.renderPlatform()
   }
 
@@ -38,7 +33,7 @@ export default class Platform {
       y: 50,
       el: this.imgEls['bird'],
       canvas: this.canvas,
-      speed: 3,
+      speed: 3
     })
 
     this.land = new Land({
@@ -47,7 +42,7 @@ export default class Platform {
       speed: 3,
       map: this.map,
       bird: this.bird,
-      onCollision: this.onCollision,
+      onCollision: this.onCollision
     })
 
     this.pipes = new Pipes({
@@ -59,7 +54,7 @@ export default class Platform {
       canvas: this.canvas,
       bird: this.bird,
       onCollision: this.onCollision,
-      minHeight: this.map.height - this.land.height,
+      minHeight: this.map.height - this.land.height
     })
   }
 
@@ -87,23 +82,12 @@ export default class Platform {
     this.canvas.removeEventListener('click', this.handleBirdUp)
   }
 
-  draw() {
+  run() {
     const { width, height } = this.canvas
     this.ctx.clearRect(0, 0, width, height)
-  }
-
-  run() {
+    this.sense.run()
     this.requestID = window.requestAnimationFrame(this.run.bind(this))
-    this.now = Date.now()
-    this.delta = this.now - this.then
 
-    if (this.delta > this.interval) {
-      // 这里不能简单then=now，否则还会出现上边简单做法的细微时间差问题。例如fps=10，每帧100ms，而现在每16ms（60fps）执行一次draw。16*7=112>100，
-      // 需要7次才实际绘制一次。这个情况下，实际10帧需要112*10=1120ms>1000ms才绘制完成。
-      this.then = this.now - (this.delta % this.interval)
-      this.draw()
-      this.sense.run()
-    }
   }
 
   stopBackground() {
