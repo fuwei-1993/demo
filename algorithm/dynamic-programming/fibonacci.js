@@ -10,19 +10,39 @@ function fibonacci(n) {
 }
 
 console.time('fibonacci')
-console.log('fibonacci(20): ', fibonacci(20));
+console.log('fibonacci(20): ', fibonacci(20))
 console.timeEnd('fibonacci')
 
 
 // 但是递归可以优化, 可以解决递归中的重复计算的问题
 const cache = {}
-function fibonacciCacheVersion(n) {
-  if(n <= 2) return 1
-  if(cache[n]) return cache[n]
-  cache[n] = fibonacciCacheVersion(n - 2) + fibonacciCacheVersion(n - 1)
+function fibonacciCached(n) {
+  if (n <= 2) return 1
+  if (cache[n]) return cache[n]
+  cache[n] = fibonacciCached(n - 2) + fibonacciCached(n - 1)
   return cache[n]
 }
 
-console.time('fibonacciCacheVersion')
-console.log('fibonacciCacheVersion(20): ', fibonacciCacheVersion(20));
-console.timeEnd('fibonacciCacheVersion')
+console.time('fibonacciCached')
+console.log('fibonacciCached(50): ', fibonacciCached(50))
+console.timeEnd('fibonacciCached')
+
+
+// 动态规划
+function fibonacciDp(n) {
+  if (n <= 2) return 1
+  const dp = []
+  dp[0] = 1
+  dp[1] = 1
+
+  for (let i = 2; i <= n; i++) {
+    dp[i] = dp[i - 1] + dp[i - 2]
+  }
+
+  return dp[n - 1]
+}
+// 速度比给了缓存的递归还快
+// 恐怖如斯
+console.time('fibonacciDp')
+console.log('fibonacciDp(50): ', fibonacciDp(50))
+console.timeEnd('fibonacciDp')
