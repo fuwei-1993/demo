@@ -6,7 +6,7 @@ export default class Bird extends AbstractStruct {
   duringWing = 100 // 100ms per time
   WingSpeed = 0 //
   downSpeed = this.speed * -2
-  gravitational = this.speed * 0.1
+  gravitational = this.speed * 0.11
   status = BIRD_STATUS.DOWN
 
   render() {
@@ -45,6 +45,7 @@ export default class Bird extends AbstractStruct {
   updateVerticalDistance() {
     this.speed = this.speed ? this.speed + this.gravitational : this.speed
     this.y = this.y + this.speed
+
   }
 
   updateBirdStatus() {
