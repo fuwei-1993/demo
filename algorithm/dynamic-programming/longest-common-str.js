@@ -34,3 +34,36 @@ console.log(
   `getLongestCommonStr('acbcbcef', 'abcbced'): `,
   getLongestCommonStr('acbcbcef', 'abcbced')
 )
+
+// 动态规划
+// 利用上一次的相交值如果是连续的记录下来
+function getLongestCommonStrDp(str1, str2) {
+  const dp = [[]]
+  let longestCommonStr = 0
+
+  for (let i = 0; i < str1.length; i++) {
+    if (!dp[i]) {
+      dp[i] = []
+    }
+    for (let j = 0; j < str2.length; j++) {
+      if (str1[i] === str2[j]) {
+        if (i > 1 && j > 1) {
+          dp[i][j] = dp[i - 1][j - 1] + 1
+          longestCommonStr = Math.max(longestCommonStr, dp[i][j])
+        } else {
+          dp[i][j] = 1
+        }
+      } else {
+        dp[i][j] = 0
+      }
+    }
+  }
+
+  return longestCommonStr
+}
+
+getLongestCommonStrDp('acbcbcef', 'abcbced')
+console.log(
+  `getLongestCommonStrDp('acbcbcef', 'abcbced'): `,
+  getLongestCommonStrDp('acbcbcef', 'abcbced')
+)
