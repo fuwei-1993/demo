@@ -38,7 +38,7 @@ console.log(
 // 动态规划
 // 利用上一次的相交值如果是连续的记录下来
 function getLongestCommonStrDp(str1, str2) {
-  const dp = [[]]
+  const dp = []
   let longestCommonStr = 0
 
   for (let i = 0; i < str1.length; i++) {
