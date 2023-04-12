@@ -26,3 +26,41 @@ function longestContinuosNum(numbers) {
 }
 
 console.log('longestContinuosNum: ', longestContinuosNum(target))
+
+// 那么动态规划如何解
+/**
+ * 1. 将问题单独细化
+ * 2. 将每一个解累计组合起来求最终解（我也清楚描述起来非常抽象😄）
+ */
+// 再一次感叹牛皮的动态规划
+/**     1,5,2,4,3
+ *  [
+ * 1   [1],
+ * 5   [0,1],
+ * 2   [2,0,1],
+ * 4   [0,0,0,1],
+ * 3   [3,0,2,0,1],
+ *  ]
+ */
+function longestContinuosNumDp(numbers) {
+  const dp = Array.from(new Array(numbers.length), () =>
+    new Array(numbers.length).fill(0)
+  )
+  let maxLen = 0
+
+  for (let i = 0; i < numbers.length; i++) {
+    for (let j = 0; j <= i; j++) {
+      if (i === j) {
+        dp[i][j] = dp[i][j] ? dp[i][j] : 1
+      }
+      if (numbers[i] - numbers[j] === 1) {
+        dp[i][i] = dp[j][j] + 1
+        maxLen = Math.max(dp[i][i], maxLen)
+      }
+    }
+  }
+  return maxLen
+}
+
+// 解到最后发现其实在用矩阵的方式求解 😂
+console.log('longestContinuosNumDp(target): ', longestContinuosNumDp(target))
