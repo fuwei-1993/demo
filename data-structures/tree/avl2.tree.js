@@ -11,8 +11,8 @@ const BalanceFactor = {
   UNBALANCED_RIGHT: 1,
   SLIGHTLY_UNBALANCED_RIGHT: 2,
   BALANCED: 3,
-  UNBALANCED_LEFT: -1,
-  SLIGHTLY_UNBALANCED_LEFT: -2,
+  UNBALANCED_LEFT: 5,
+  SLIGHTLY_UNBALANCED_LEFT: 4,
 }
 
 class AvlTree {
@@ -24,5 +24,39 @@ class AvlTree {
       Math.max(this.getNodeHeight(node.left), this.getNodeHeight(node.right)) +
       1
     )
+  }
+
+  getBalanceFactor(node) {
+    const heightDiff =
+      this.getNodeHeight(node.left) - this.getNodeHeight(node.right)
+
+    switch (heightDiff) {
+      case -2:
+        return BalanceFactor.UNBALANCED_RIGHT
+      case 2:
+        return BalanceFactor.UNBALANCED_LEFT
+      case 1:
+        return BalanceFactor.SLIGHTLY_UNBALANCED_LEFT
+      case -1:
+        return BalanceFactor.SLIGHTLY_UNBALANCED_RIGHT
+      default:
+        return BalanceFactor.BALANCED
+    }
+  }
+
+  rotationLL(node) {
+    const temp = node.left
+    node.left = temp.right
+    temp.right = node
+
+    return temp
+  }
+
+  rotationRR(node) {
+    const temp = node.right
+    node.right = temp.left
+    temp.left = node
+
+    return temp
   }
 }
