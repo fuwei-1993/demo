@@ -1,15 +1,11 @@
 // 0 1 背包问题
 
 const goods = [
-  {
-    wight: 1,
-    value: 1,
-  },
-  {
-    wight: 3,
-    value: 2,
-  },
-  { wight: 4, value: 3 },
+  { value: 4, size: 3 },
+  { value: 5, size: 4 },
+  { value: 10, size: 7 },
+  { value: 11, size: 8 },
+  { value: 13, size: 9 },
 ]
 
 /**
@@ -21,15 +17,30 @@ const goods = [
  ]
  *
  */
+// TODO.. 没有限制物品拿取的次数
+
 
 function getHighestValue(goods, packageWight) {
-  const dp = [[]]
-  dp[0][0] = 1
-  dp[0][1] = 1
+  const dp = Array.from(new Array(goods.length), () =>
+    new Array(packageWight).fill(0)
+  )
 
-  for(let i = 1; i < goods.length; i++) {
-    for(let j = 1; j < packageWight; j++) {
-      dp[i][j] = Math.min()
+  for (let i = 0; i < goods.length; i++) {
+    for (let j = 0; j < packageWight; j++) {
+      if (goods[i].size > j + 1) {
+        dp[i][j] = dp[i - 1 < 0 ? 0 : i - 1][j]
+      } else {
+        dp[i][j] = Math.max(
+          dp[i - 1 < 0 ? 0 : i - 1][j],
+          (dp[i - 1 < 0 ? 0 : i - 1][j - goods[i].size] ?? 0) + goods[i].value
+        )
+      }
     }
   }
+
+  console.log(dp)
+
+  return dp[goods.length - 1][packageWight - 1] ?? 0
 }
+
+console.log('getHighestValue(goods, 8): ', getHighestValue(goods, 9))
