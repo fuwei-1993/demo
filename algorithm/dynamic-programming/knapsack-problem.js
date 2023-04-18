@@ -17,30 +17,30 @@ const goods = [
  ]
  *
  */
-// TODO.. 没有限制物品拿取的次数
 
+function makeTwoDimensionalArray(inner, outer) {
+  return Array.from(new Array(outer), () => new Array(inner).fill(0))
+}
 
 function getHighestValue(goods, packageWight) {
-  const dp = Array.from(new Array(goods.length), () =>
-    new Array(packageWight).fill(0)
-  )
+  const dp = makeTwoDimensionalArray(packageWight, goods.length)
 
   for (let i = 0; i < goods.length; i++) {
     for (let j = 0; j < packageWight; j++) {
       if (goods[i].size > j + 1) {
         dp[i][j] = dp[i - 1 < 0 ? 0 : i - 1][j]
       } else {
+        // 取上一个物品时 为0时就代表没有，不能去取第一个物品
         dp[i][j] = Math.max(
-          dp[i - 1 < 0 ? 0 : i - 1][j],
-          (dp[i - 1 < 0 ? 0 : i - 1][j - goods[i].size] ?? 0) + goods[i].value
+          i - 1 < 0 ? 0 : dp[i - 1][j],
+          ((i - 1 < 0 ? 0 : dp[i - 1][j - goods[i].size]) ?? 0) + goods[i].value
         )
       }
     }
   }
 
-  console.log(dp)
-
   return dp[goods.length - 1][packageWight - 1] ?? 0
 }
 
 console.log('getHighestValue(goods, 8): ', getHighestValue(goods, 9))
+
