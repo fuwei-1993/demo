@@ -52,7 +52,6 @@ function calcMinNumOfCoins2(coins, totalCount) {
         const count = Math.floor(i / coins[j])
         const diffValue = i - count * coins[j]
 
-        dp[i][j] = dp[i - diffValue][0] + count
         dp[i][j] =
           j - 1 > 0
             ? Math.min(dp[i][j - 1], dp[diffValue][j - 1] + count)
