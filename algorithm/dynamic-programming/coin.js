@@ -37,25 +37,31 @@
 
 // 更简洁的思维方式
 function calcMinNumOfCoins2(coins, totalCount) {
+
+  if(!totalCount) return 0
+  const sortCoins = coins.sort((a, b) => a - b)
   const dp = []
   for (let i = 0; i <= totalCount; i++) {
     if (!dp[i]) {
       dp[i] = []
     }
-    for (let j = 0; j < coins.length; j++) {
+    for (let j = 0; j < sortCoins.length; j++) {
       if (!dp[i][j]) {
         dp[i][j] = 0
       }
       if (coins[j] > i) {
-        dp[i][j] = j - 1 < 0 ? 0 : dp[i][j - 1]
+        dp[i][j] = j - 1 < 0 ? -1 : dp[i][j - 1]
       } else {
         const count = Math.floor(i / coins[j])
         const diffValue = i - count * coins[j]
+        const prevCount = dp[i][j - 1]
+        const current = dp[diffValue][j - 1]
 
-        dp[i][j] =
-          j - 1 > 0
-            ? Math.min(dp[i][j - 1], dp[diffValue][j - 1] + count)
-            : dp[diffValue][0] + count
+        if(prevCount > 0 && current > 0) {
+          dp[i][j] = Math.min(prevCount, current + count)
+        } else {
+          dp[i][j] = diffValue && i === totalCount ? -1 : count
+        }
       }
     }
   }
@@ -64,8 +70,9 @@ function calcMinNumOfCoins2(coins, totalCount) {
 }
 
 console.log(
-  'calcMinNumOfCoins2([1, 2, 3, 4], 23): ',
-  calcMinNumOfCoins2([1, 2, 3, 4], 23)
+  'calcMinNumOfCoins2: ',
+  calcMinNumOfCoins2([186,419,83,408],
+    6249)
 )
 
 // 假设我们有8种不同面值的硬币｛1，2，5，10，20，50，100，200｝，用这些硬币组合够成一个给定的数值n。
@@ -73,3 +80,39 @@ console.log(
 // 问总过有多少种可能的组合方式？
 
 // 动态规划的思路就是先把大问题拆分成n个小问题，最后再合并
+
+function calcCombineCountOfCoins(coins, totalCount) {
+  const dp = []
+  for (let i = 0; i <= totalCount; i++) {
+    if (!dp[i]) {
+      dp[i] = []
+    }
+    for (let j = 0; j < coins.length; j++) {
+      if (dp[i][j] === undefined) {
+        dp[i][j] = 0
+      }
+
+      if (coins[j] > i) {
+        dp[i][j] = j - 1 < 0 ? 0 : dp[i][j - 1]
+      } else {
+        let times = Math.floor(i / coins[j])
+        let count = 0
+        while (times > 0) {
+          const remainder = i - times * coins[j]
+          if (!remainder || dp[remainder][j - 1]) {
+            count++
+          }
+          times--
+        }
+        dp[i][j] = (j - 1 > 0 ? dp[i][j - 1] : 0) + count
+      }
+    }
+  }
+
+  return dp[totalCount][coins.length - 1]
+}
+
+console.log(
+  'calcCombineCountOfCoins([1,2,5,10,20,50,100,200],200): ',
+  calcCombineCountOfCoins([1, 2, 5, 10, 20, 50, 100, 200], 200)
+)
