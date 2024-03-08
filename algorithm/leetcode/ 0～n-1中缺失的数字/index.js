@@ -13,14 +13,11 @@
 // 输出: 8
 
 function missingNumber(numbers) {
-  let start = 0, end = numbers.length - 1
-
-
-  while(start <= end) {
-    let mid = Math.floor((end + start)/2)
-    if(mid === start) return start
+  for (let i = 0; i < numbers.length; i++) {
+    if(numbers[i] !== i) {
+      return i
+    }
   }
-
   return null
 }
 
@@ -58,5 +55,5 @@ const numbers = [...(new Array(1000000).keys())]
 numbers.splice(Math.random() * 1000000, 1, undefined)
 
 console.time('time')
-console.log(missingNumber2(numbers))
+console.log(missingNumber(numbers))
 console.timeEnd('time')
