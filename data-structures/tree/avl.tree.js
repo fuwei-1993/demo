@@ -48,7 +48,7 @@ class AvlTree {
     return isBalance(node.left) && this.isBalance(node.right)
   }
 
-  // TODO..
+  // TODO:..
   leftRotate(node) {
     const top = node.right
     const coupWater = top.left
