@@ -41,3 +41,24 @@ function mergeTwoLists(list1, list2) {
 }
 
 console.log(mergeTwoLists(list1, list2))
+
+function mergeTwoArr(arr1, arr2) {
+  const result = []
+  let point1 = 0
+  let point2 = 0
+
+
+  while(point1 < arr1.length || point2 < arr2.length) {
+    if(arr1[point1] < arr2[point2]) {
+      result.push(arr1[point1])
+      point1++
+    } else {
+      result.push(arr2[point2])
+      point2++
+    }
+  }
+
+  return result
+}
+
+console.log(mergeTwoArr([1, 2, 3], [3, 4, 5, 6, 7]))
