@@ -58,3 +58,19 @@ function moveZeroes2(nums) {
 }
 
 console.log(moveZeroes2([0, 1, 0, 3, 12]))
+
+function moveZeroes3(nums) {
+  for (let i = 0; i < nums.length; i++) {
+    if (nums[i] === 0) {
+      for (let j = i + 1; j < nums.length; j++) {
+        if (nums[j] !== 0) {
+          nums[i] = nums[j]
+          nums[j] = 0
+          break
+        }
+      }
+    }
+  }
+  return nums
+}
+console.log(moveZeroes3([0, 1, 0, 3, 12]))
