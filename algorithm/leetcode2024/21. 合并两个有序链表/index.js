@@ -29,9 +29,9 @@ list2.next.next = new ListNode(5)
  * @return {ListNode}
  */
 function mergeTwoLists(list1, list2) {
-  if(!list1 || !list2) return list1 || list2
+  if (!list1 || !list2) return list1 || list2
 
-  if(list1.value > list2.value) {
+  if (list1.value > list2.value) {
     list2.next = mergeTwoLists(list2.next, list1)
     return list2
   } else {
@@ -47,9 +47,8 @@ function mergeTwoArr(arr1, arr2) {
   let point1 = 0
   let point2 = 0
 
-
-  while(point1 < arr1.length || point2 < arr2.length) {
-    if(arr1[point1] < arr2[point2]) {
+  while (point1 < arr1.length || point2 < arr2.length) {
+    if (arr1[point1] < arr2[point2]) {
       result.push(arr1[point1])
       point1++
     } else {
@@ -62,3 +61,26 @@ function mergeTwoArr(arr1, arr2) {
 }
 
 console.log(mergeTwoArr([1, 2, 3], [3, 4, 5, 6, 7]))
+
+// js中不适用
+// function mergeTwoList2(l1, l2) {
+//   let prev = new ListNode(-1)
+
+//   while (l1 && l2) {
+//     if (l1.value <= l2.value) {
+//       prev.next = l1
+//       l1 = l1.next
+//     } else {
+//       prev.next = l2
+//       l2 = l2.next
+//     }
+
+//     prev = prev.next
+//   }
+
+//   prev.next = l1 === null ? l2 : l1
+
+//   return prev.next
+// }
+
+// console.log(mergeTwoList2(list1, list2))
