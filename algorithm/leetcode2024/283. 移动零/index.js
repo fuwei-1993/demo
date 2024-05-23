@@ -74,3 +74,36 @@ function moveZeroes3(nums) {
   return nums
 }
 console.log(moveZeroes3([0, 1, 0, 3, 12]))
+
+function moveZeroes4(nums) {
+  let j = 0
+
+  for (let i = 0; i < nums.length; i++) {
+    if (nums[i] !== 0) {
+      nums[j++] = nums[i]
+    }
+  }
+
+  for (; j < nums.length; j++) {
+    nums[j] = 0
+  }
+  return nums
+}
+
+console.log(moveZeroes4([0, 1, 0, 3, 12]))
+
+function moveZeroes5(nums) {
+  for (let i = 0, j = 0; i < nums.length; i++) {
+    if (nums[i] !== 0) {
+      if (j < i) {
+        nums[j] = nums[i]
+        nums[i] = 0
+      }
+      j++
+    }
+  }
+
+  return nums
+}
+
+console.log(moveZeroes5([0, 1, 0, 3, 12]))
