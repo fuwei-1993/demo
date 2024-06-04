@@ -30,4 +30,20 @@ function reverseList(head) {
   return prev
 }
 
-reverseList(head)
+// reverseList(head)
+
+function reverseList2(head) {
+  let prev = null
+  let h = head
+
+  while (h) {
+    const next = h.next
+    h.next = prev
+    prev = h
+    h = next
+  }
+
+  return prev
+}
+
+console.log(reverseList2(head))
