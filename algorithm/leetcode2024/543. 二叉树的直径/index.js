@@ -61,4 +61,20 @@ function diameterOfBinaryTree(root) {
 
 console.log(diameterOfBinaryTree(root))
 
-function diameterOfBinaryTree2() {}
+function diameterOfBinaryTree2(root) {
+  let ans = 1
+  function depth(root) {
+    if (!root) return 0
+
+    const l = depth(root.left)
+    const r = depth(root.right)
+
+    ans = Math.max(ans, l + r)
+    return Math.max(l, r) + 1
+  }
+
+  depth(root)
+  return ans
+}
+
+console.log(diameterOfBinaryTree2(root))
