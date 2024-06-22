@@ -10,25 +10,25 @@
 // ​因为这样属于同时参与了多笔交易，你必须在再次购买前出售掉之前的股票。
 
 function make(length) {
-  const result = []
-  for (let i = 0; i < length; i++) {
-    result.push([])
-  }
-  return result
+	const result = []
+	for (let i = 0; i < length; i++) {
+		result.push([])
+	}
+	return result
 }
 
 function maxProfit(prices) {
-  if (prices.length < 2) return 0
-  const dp = make(prices.length)
-  dp[0][0] = 0
-  dp[0][1] = -prices[0]
+	if (prices.length < 2) return 0
+	const dp = make(prices.length)
+	dp[0][0] = 0
+	dp[0][1] = -prices[0]
 
-  for (let i = 1; i < prices.length; i++) {
-    dp[i][0] = Math.max(dp[i - 1][0], dp[i - 1][1] + prices[i])
-    dp[i][1] = Math.max(dp[i - 1][0] - prices[i], dp[i - 1][1])
-  }
-  console.log(dp)
-  return dp[prices.length - 1][0]
+	for (let i = 1; i < prices.length; i++) {
+		dp[i][0] = Math.max(dp[i - 1][0], dp[i - 1][1] + prices[i])
+		dp[i][1] = Math.max(dp[i - 1][0] - prices[i], dp[i - 1][1])
+	}
+	console.log(dp)
+	return dp[prices.length - 1][0]
 }
 
 console.log(maxProfit([1, 2, 3, 4, 5, 6, 7]))
@@ -36,18 +36,18 @@ console.log(maxProfit([7, 1, 5, 3, 6, 4]))
 
 // 由于上面的方法过于不好理解 所以写了第二种
 function maxProfit2(prices) {
-  if (prices.length < 2) return 0
-  let price = -prices[0]
-  let earnedMoney = 0
-  for (let i = 1; i < prices.length; i++) {
-    if (price + prices[i] > 0) {
-      earnedMoney += price + prices[i]
-    }
+	if (prices.length < 2) return 0
+	let price = -prices[0]
+	let earnedMoney = 0
+	for (let i = 1; i < prices.length; i++) {
+		if (price + prices[i] > 0) {
+			earnedMoney += price + prices[i]
+		}
 
-    price = -prices[i]
-  }
+		price = -prices[i]
+	}
 
-  return earnedMoney
+	return earnedMoney
 }
 console.log(maxProfit2([1, 2, 3, 4, 5, 6, 7]))
 console.log(maxProfit2([7, 1, 5, 3, 6, 4]))

@@ -39,7 +39,7 @@ function maxProfit(prices) {
 console.log(maxProfit([1, 2]))
 
 /**
- * @description 此方法是利用折线图，最低买入最高卖出实现（动态规划）
+ * @description 此方法是利用折线图，最低买入最高卖出实现
  * @param {number[]} prices
  * @return {number}
  */
@@ -55,3 +55,23 @@ function maxProfit2(prices) {
 }
 
 console.log(maxProfit2([1, 2]))
+
+/**
+ * @description 动态规划
+ * @param {number[]} prices
+ * @return {number}
+ */
+function maxProfit3(prices) {
+	if (prices.length < 2) return 0
+	const dp = [0]
+	let minPrice = prices[0]
+
+	for (let i = 1; i < prices.length; i++) {
+		minPrice = Math.min(prices[i], minPrice)
+		dp[i] = Math.max(dp[i - 1], prices[i] - minPrice)
+	}
+
+	return dp.at(-1)
+}
+
+console.log(maxProfit3([7, 1, 5, 3, 6, 4]))
