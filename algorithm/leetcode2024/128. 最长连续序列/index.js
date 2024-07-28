@@ -39,4 +39,28 @@ function longestConsecutive(nums) {
 	)
 }
 
-console.log(longestConsecutive([100, 4, 200, 1, 3, 2]))
+/**
+ *
+ * @param {number[]} nums
+ */
+function longestConsecutive2(nums) {
+	const numSet = new Set(nums)
+	let result = 0
+
+	for (const num of numSet) {
+		if (!numSet.has(num - 1)) {
+			let longestStreak = 1
+			let current = num
+			while (numSet.has(current + 1)) {
+				longestStreak++
+				current++
+			}
+
+			result = Math.max(result, longestStreak)
+		}
+	}
+
+	return result
+}
+
+console.log(longestConsecutive2([0, 3, 7, 2, 5, 8, 4, 6, 0, 1]))
